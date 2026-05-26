@@ -219,31 +219,39 @@ section{padding:7rem 3rem}
   background:var(--surface);
   overflow:hidden;
 }
+/* Overlay mỏng — để ảnh thở, không che kín */
 .about-visual::before{
   content:'';
   position:absolute;inset:0;
-  background:linear-gradient(135deg, var(--surface) 0%, #1E1A10 100%);
+  background:
+    linear-gradient(to bottom, rgba(12,11,9,.15) 0%, rgba(12,11,9,.0) 40%, rgba(12,11,9,.55) 100%),
+    linear-gradient(to right,  rgba(12,11,9,.0)  0%, rgba(12,11,9,.4) 100%);
+  z-index:1;
+  pointer-events:none;
 }
 .about-visual-accent{
   position:absolute;
   right:-1px;top:2rem;bottom:2rem;
   width:3px;background:var(--gold);
+  z-index:2;
 }
 .about-visual-text{
   position:absolute;bottom:2rem;left:2rem;right:2rem;
   font-family:var(--ff-display);
   font-size:3.5rem;
   font-weight:300;
-  color:rgba(197,164,85,.08);
+  color:rgba(197,164,85,.12);
   line-height:.95;
   letter-spacing:.05em;
   user-select:none;
+  z-index:2;
 }
 .about-visual-label{
   position:absolute;top:2rem;left:2rem;
   font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--gold-dim);
+  color:var(--gold);
   display:flex;flex-direction:column;gap:.4rem;
+  z-index:2;
 }
 .about-visual-label::after{content:'';width:2px;height:2.5rem;background:var(--gold);margin-top:.4rem;display:block}
 .about-stats{
@@ -815,7 +823,7 @@ footer{
   CÁCH THÊM ẢNH CHÂN DUNG vào khung bên trái (class="about-visual"):
   Xóa hoặc giữ lại <div class="about-visual-text"> (chữ mờ phía sau).
   Thêm thẻ <img> ngay sau dòng <div class="about-visual-label">...:
-    <img src="https://plus.unsplash.com/premium_photo-1682141028605-b2456e2bab14?q=80&w=687&auto=format&fit=crop" alt="Portrait"
+    <img src="portrait.jpg" alt="Portrait"
          style="position:absolute;inset:0;width:100%;height:100%;
                 object-fit:cover;object-position:top center;opacity:0.85;">
   → Ảnh dọc (portrait) tỉ lệ 4:5 là đẹp nhất, nên chụp với ánh sáng tự nhiên.
@@ -825,9 +833,15 @@ footer{
 <!-- ABOUT -->
 <section id="about">
   <div class="about-visual reveal">
-    <!-- 📍 VỊ TRÍ ĐẶT ẢNH CHÂN DUNG — Xem hướng dẫn comment bên trên -->
+    <!-- 📍 ẢNH CHÂN DUNG — đặt đúng vị trí, dùng vanilla CSS, không dùng Tailwind -->
+    <img
+      src="https://plus.unsplash.com/premium_photo-1682141028605-b2456e2bab14?q=80&w=687&auto=format&fit=crop"
+      alt="Portrait"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;z-index:0;"
+      onerror="this.style.display='none'">
+
+    <!-- Label, text và accent nằm trên ảnh (z-index:2) -->
     <div class="about-visual-label">
-      <img src="https://plus.unsplash.com/premium_photo-1682141028605-b2456e2bab14?q=80&w=687&auto=format&fit=crop" alt="Portrait" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-1000"><div class="absolute;inset:0;width:100%;height:100%; object-fit:cover;object-position:top center;opacity:0.85; border border-white/20 pointer-events-none"></div>
       <span>Filmmaker</span>
       <span>Storyteller</span>
     </div>
@@ -842,10 +856,10 @@ footer{
       <p>Song song với dựng phim, tôi thiết kế đồ họa với phong cách tối giản — nơi typography và bố cục tạo nên ngôn ngữ hình ảnh đặc trưng. Những chuyến đi bụi là nguồn cảm hứng bất tận cho mọi tác phẩm.</p>
     </div>
     <div class="about-stats reveal">
-      <div class="stat"><div class="stat-num">99+</div><div class="stat-label">Dự Án Video</div></div>
+      <div class="stat"><div class="stat-num">120+</div><div class="stat-label">Dự Án Video</div></div>
       <div class="stat"><div class="stat-num">5+</div><div class="stat-label">Năm Kinh Nghiệm</div></div>
-      <div class="stat"><div class="stat-num">18+</div><div class="stat-label">Thương Hiệu</div></div>
-      <div class="stat"><div class="stat-num">5+</div><div class="stat-label">Nền Tảng</div></div>
+      <div class="stat"><div class="stat-num">18</div><div class="stat-label">Quốc Gia</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Giải Thưởng</div></div>
     </div>
   </div>
 </section>
