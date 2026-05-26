@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Khung Hình</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TRANG CON BLOG — blog.html
+   Đây là trang độc lập chỉ chứa Blog + Admin.
+   Link từ portfolio.html: <a href="blog.html">Blog</a>
+   Chia sẻ dữ liệu qua localStorage (key: kh_posts)
+   ═══════════════════════════════════════════ */
+:root{
+  --bg:#0C0B09; --surface:#141210; --surface2:#1C1914;
+  --gold:#C5A455; --gold-dim:#8A6F32;
+  --cream:#EDE5D2; --cream-dim:#9A9080;
+  --border:rgba(197,164,85,0.15); --border2:rgba(237,229,210,0.07);
+  --ff-d:'Cormorant Garamond',Georgia,serif;
+  --ff-b:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:var(--ff-b);font-weight:300;line-height:1.7;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:.5}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold-dim)}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;padding:1.2rem 3rem;display:flex;align-items:center;justify-content:space-between;background:rgba(12,11,9,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:var(--ff-d);font-size:1.2rem;font-weight:300;letter-spacing:.25em;color:var(--gold);text-decoration:none;text-transform:uppercase}
+.nav-back{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;display:flex;align-items:center;gap:.5rem;transition:color .3s}
+.nav-back:hover{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+#admin-toggle-btn{background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.4rem .9rem;font-family:var(--ff-b);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+#admin-toggle-btn:hover{border-color:var(--gold);color:var(--gold)}
+#admin-toggle-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(197,164,85,.08)}
+
+/* HERO BLOG */
+.blog-hero{padding:5rem 3rem 3rem;border-bottom:1px solid var(--border2);position:relative}
+.blog-hero-label{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.blog-hero-label::before{content:'';width:2rem;height:1px;background:var(--gold)}
+.blog-hero h1{font-family:var(--ff-d);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;line-height:1.05}
+.blog-hero h1 em{font-style:italic;color:var(--gold)}
+.blog-hero-sub{margin-top:1rem;font-size:.85rem;color:var(--cream-dim);max-width:36rem;line-height:1.8}
+.blog-hero-meta{margin-top:1.5rem;display:flex;gap:2rem;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim)}
+.blog-hero-meta span{display:flex;align-items:center;gap:.5rem}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease infinite;display:inline-block}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+
+/* FILTER TABS */
+.filter-bar{padding:1.5rem 3rem;border-bottom:1px solid var(--border2);display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.filter-btn{background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.4rem 1rem;font-family:var(--ff-b);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(197,164,85,.05)}
+.filter-count{font-size:.55rem;background:var(--gold-dim);color:var(--bg);padding:.15rem .4rem;margin-left:.3rem;font-weight:400}
+
+/* BLOG GRID */
+.blog-main{padding:3rem}
+.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border:1px solid var(--border2)}
+.post-card{background:var(--surface2);border:1px solid var(--border2);cursor:pointer;transition:background .3s;overflow:hidden}
+.post-card:hover{background:rgba(197,164,85,.04)}
+.post-card.featured-card{grid-column:1/-1;display:grid;grid-template-columns:1.2fr 1fr}
+
+/* ═══════════════════════════════════════════════
+   🖼 VỊ TRÍ ẢNH BÌA BÀI VIẾT — post-card-img
+   Ảnh được render tự động từ field "thumbnail" của bài viết.
+   Nếu không có thumbnail → hiển thị gradient màu theo chủ đề.
+   Kích thước: 800×450px (tỉ lệ 16:9) hoặc 600×600px (vuông).
+   ═══════════════════════════════════════════════ */
+.post-card-img{
+  aspect-ratio:16/9;overflow:hidden;
+  position:relative;background:var(--surface);
+  flex-shrink:0;
+}
+.post-card.featured-card .post-card-img{aspect-ratio:auto;min-height:280px}
+.post-card-img img{width:100%;height:100%;object-fit:cover;opacity:.8;transition:transform .5s ease,opacity .3s}
+.post-card:hover .post-card-img img{transform:scale(1.04);opacity:.9}
+.post-card-img-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.post-card-img-placeholder span{font-size:2.5rem;opacity:.15}
+.post-img-cat-badge{position:absolute;top:.8rem;left:.8rem;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;background:rgba(12,11,9,.8);color:var(--gold);padding:.25rem .6rem;border:1px solid rgba(197,164,85,.3)}
+.ai-badge{position:absolute;top:.8rem;right:.8rem;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(197,164,85,.15);color:var(--gold);padding:.2rem .5rem;border:1px solid rgba(197,164,85,.3)}
+
+.post-card-body{padding:1.8rem}
+.post-cat{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.post-cat::before{content:'';width:.8rem;height:1px;background:var(--gold)}
+.post-title{font-family:var(--ff-d);font-size:1.25rem;font-weight:400;line-height:1.2;margin-bottom:.7rem}
+.post-card.featured-card .post-title{font-size:1.75rem}
+.post-excerpt{font-size:.78rem;color:var(--cream-dim);line-height:1.75;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.post-meta{margin-top:1.2rem;display:flex;justify-content:space-between;align-items:center;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-dim)}
+.post-readtime{border:1px solid var(--border);padding:.2rem .6rem;color:var(--gold-dim)}
+
+/* EMPTY STATE */
+.empty-state{grid-column:1/-1;padding:5rem;text-align:center}
+.empty-state h3{font-family:var(--ff-d);font-size:1.8rem;font-weight:300;color:var(--cream-dim);margin-bottom:.8rem}
+.empty-state p{font-size:.82rem;color:var(--cream-dim)}
+
+/* READ MODAL */
+#read-modal{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.93);display:none;overflow-y:auto}
+#read-modal.open{display:block}
+.read-modal-inner{max-width:780px;margin:0 auto;padding:5rem 2rem 5rem}
+.read-modal-close{position:fixed;top:1.2rem;right:1.5rem;background:none;border:1px solid var(--border2);color:var(--cream-dim);width:2.5rem;height:2.5rem;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .3s;z-index:201}
+.read-modal-close:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ═══════════════════════════════════════════════
+   🖼 VỊ TRÍ ẢNH BÌA TRONG TRANG ĐỌC BÀI
+   Ảnh full-width xuất hiện ở đầu bài viết khi mở modal đọc.
+   ═══════════════════════════════════════════════ */
+.read-hero-img{width:100%;aspect-ratio:21/9;object-fit:cover;margin-bottom:2.5rem;opacity:.85}
+.read-hero-img-placeholder{width:100%;aspect-ratio:21/9;background:var(--surface);margin-bottom:2.5rem;display:flex;align-items:center;justify-content:center}
+.read-cat{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.read-title{font-family:var(--ff-d);font-size:clamp(2rem,4vw,3rem);font-weight:300;line-height:1.1;margin-bottom:1.5rem}
+.read-meta{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);padding:1rem 0;border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);margin-bottom:2.5rem;display:flex;gap:2rem;flex-wrap:wrap}
+.read-body{font-size:.92rem;color:var(--cream-dim);line-height:2}
+.read-body h3{font-family:var(--ff-d);font-size:1.5rem;font-weight:400;color:var(--cream);margin:2.5rem 0 .8rem}
+.read-body p{margin-bottom:1.2rem}
+.read-body blockquote{border-left:2px solid var(--gold);padding-left:1.5rem;margin:2rem 0;font-style:italic;font-size:1.05rem;color:var(--cream);line-height:1.7}
+.read-body ul{padding-left:1.3rem;margin-bottom:1.2rem}
+.read-body li{margin-bottom:.5rem}
+
+/* ═══════════════════════════════════════════════
+   🖼 ẢNH TRONG NỘI DUNG BÀI VIẾT
+   Khi viết bài, chèn ảnh trong nội dung bằng HTML:
+   <img src="path/to/img.jpg" alt="Mô tả" class="post-inline-img">
+   ═══════════════════════════════════════════════ */
+.read-body img,.post-inline-img{width:100%;aspect-ratio:16/9;object-fit:cover;margin:1.5rem 0;opacity:.85}
+
+/* ════════════════════════════════════════════════
+   ADMIN SIDEBAR (chỉ hiển thị sau khi đăng nhập)
+   ════════════════════════════════════════════════ */
+.admin-sidebar{
+  position:fixed;top:0;right:0;bottom:0;
+  width:480px;
+  background:var(--surface);
+  border-left:1px solid var(--border);
+  z-index:150;
+  transform:translateX(100%);
+  transition:transform .4s cubic-bezier(.25,.1,.25,1);
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+.admin-sidebar.open{transform:translateX(0)}
+.admin-sidebar-head{
+  padding:1.5rem 2rem;
+  border-bottom:1px solid var(--border2);
+  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;background:var(--surface);z-index:2;
+}
+.admin-sidebar-title{font-family:var(--ff-d);font-size:1.4rem;font-weight:300}
+.sidebar-close{background:none;border:none;color:var(--cream-dim);cursor:pointer;font-size:1.1rem;padding:.3rem;transition:color .3s}
+.sidebar-close:hover{color:var(--gold)}
+.admin-sidebar-body{padding:2rem;flex:1}
+.sidebar-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.stab{background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.4rem .9rem;font-family:var(--ff-b);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.stab:hover{border-color:var(--gold-dim);color:var(--cream)}
+.stab.active{border-color:var(--gold);color:var(--gold);background:rgba(197,164,85,.06)}
+.stab-content{display:none}
+.stab-content.active{display:block}
+
+/* Login gate trong sidebar */
+.sidebar-login{padding:2.5rem 0;text-align:center}
+.sidebar-login-icon{font-size:2rem;margin-bottom:1rem}
+.sidebar-login-title{font-family:var(--ff-d);font-size:1.4rem;font-weight:300;margin-bottom:.4rem}
+.sidebar-login-sub{font-size:.72rem;color:var(--cream-dim);margin-bottom:1.5rem}
+.sidebar-pw-wrap{position:relative;margin-bottom:.8rem}
+.sidebar-pw-wrap input{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--cream);padding:.8rem 2.8rem .8rem 1rem;font-family:var(--ff-b);font-size:.85rem;outline:none;transition:border-color .3s;letter-spacing:.08em}
+.sidebar-pw-wrap input:focus{border-color:var(--gold)}
+.sidebar-eye{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--cream-dim);cursor:pointer;font-size:.8rem}
+.sidebar-login-err{font-size:.65rem;color:#B06060;min-height:1rem;margin-bottom:.8rem;text-align:left}
+.sidebar-login-btn{width:100%;background:var(--gold);color:var(--bg);border:none;padding:.85rem;font-family:var(--ff-b);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:opacity .3s}
+.sidebar-login-btn:hover{opacity:.85}
+.sidebar-login-btn:disabled{opacity:.4;cursor:not-allowed}
+.sidebar-attempts{font-size:.6rem;color:var(--cream-dim);margin-top:.8rem}
+
+/* Admin form in sidebar */
+.s-form-row{margin-bottom:1.2rem}
+.s-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.4rem}
+.s-input,.s-select,.s-textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);color:var(--cream);padding:.7rem .9rem;font-family:var(--ff-b);font-size:.82rem;font-weight:300;outline:none;transition:border-color .3s}
+.s-input:focus,.s-select:focus,.s-textarea:focus{border-color:var(--gold)}
+.s-select option{background:var(--surface)}
+.s-textarea{min-height:110px;resize:vertical}
+
+/* ═══════════════════════════════════════════════
+   🖼 UPLOAD ẢNH BÌA CHO BÀI VIẾT (Admin sidebar)
+   Admin có thể nhập URL ảnh hoặc dùng ảnh Unsplash tự động.
+   ═══════════════════════════════════════════════ */
+.img-input-wrap{position:relative}
+.img-preview{width:100%;aspect-ratio:16/9;object-fit:cover;margin-top:.6rem;border:1px solid var(--border2);display:none;opacity:.8}
+.img-preview.show{display:block}
+.img-auto-badge{font-size:.55rem;letter-spacing:.1em;color:var(--gold-dim);margin-top:.3rem}
+.img-source-tabs{display:flex;gap:.4rem;margin-bottom:.6rem}
+.img-stab{background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.3rem .7rem;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.img-stab.active{border-color:var(--gold);color:var(--gold)}
+
+.s-btn{background:var(--gold);color:var(--bg);border:none;padding:.8rem 1.5rem;font-family:var(--ff-b);font-size:.7rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:opacity .3s;margin-top:.5rem}
+.s-btn:hover{opacity:.85}
+.s-btn-ghost{background:none;border:1px solid var(--border);color:var(--cream-dim);padding:.8rem 1.5rem;font-family:var(--ff-b);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:.5rem;margin-left:.6rem}
+.s-btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.schedule-badge{padding:1rem 1.2rem;background:var(--bg);border-left:2px solid var(--gold);font-size:.78rem;color:var(--cream-dim);margin-bottom:1.5rem}
+.schedule-badge strong{color:var(--gold);font-weight:400}
+.ai-stream{background:rgba(197,164,85,.05);border:1px solid var(--border);padding:.9rem;font-size:.75rem;color:var(--cream-dim);line-height:1.7;margin-top:.8rem;min-height:70px;display:none}
+.ai-stream.show{display:block}
+.history-item{padding:.7rem 0;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem}
+.history-item-info{flex:1;min-width:0}
+.history-item-title{font-size:.78rem;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.history-item-meta{font-size:.58rem;letter-spacing:.08em;color:var(--cream-dim);margin-top:.2rem}
+.history-del{background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.25rem .5rem;font-size:.58rem;cursor:pointer;transition:all .3s;flex-shrink:0}
+.history-del:hover{border-color:#8B3A3A;color:#B06060}
+.admin-topbar-badge{display:flex;align-items:center;gap:.5rem;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:.4rem}
+.admin-green-dot{width:6px;height:6px;border-radius:50%;background:#4CAF50}
+.sidebar-logout{background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.3rem .7rem;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.sidebar-logout:hover{border-color:#8B3A3A;color:#B06060}
+.toggle-row{display:flex;align-items:center;gap:.8rem;margin:.8rem 0}
+.toggle-sw{width:40px;height:22px;background:var(--gold);border-radius:11px;position:relative;cursor:pointer;transition:background .3s;flex-shrink:0}
+.toggle-sw .thumb{width:18px;height:18px;background:var(--bg);border-radius:50%;position:absolute;top:2px;right:2px;transition:right .3s}
+.toggle-sw.off{background:var(--surface2)}
+.toggle-sw.off .thumb{right:auto;left:2px}
+.toggle-label{font-size:.72rem;color:var(--cream)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--surface);border:1px solid var(--gold);padding:1rem 1.5rem;font-size:.78rem;color:var(--cream);z-index:300;transform:translateX(120%);transition:transform .4s;max-width:320px}
+.toast.show{transform:translateX(0)}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:center;gap:.5rem;padding:2rem 3rem 3rem}
+.page-btn{background:none;border:1px solid var(--border2);color:var(--cream-dim);width:2.2rem;height:2.2rem;cursor:pointer;font-size:.7rem;transition:all .3s;display:flex;align-items:center;justify-content:center}
+.page-btn:hover,.page-btn.active{border-color:var(--gold);color:var(--gold)}
+
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.2rem}
+  .blog-hero{padding:3rem 1.2rem 2rem}
+  .filter-bar{padding:1rem 1.2rem}
+  .blog-main{padding:1.5rem 1.2rem}
+  .posts-grid{grid-template-columns:1fr}
+  .post-card.featured-card{grid-template-columns:1fr}
+  .admin-sidebar{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-back">← Portfolio</a>
+  <a href="blog.html" class="nav-logo">Khung Hình · Blog</a>
+  <div class="nav-right">
+    <div id="schedule-status-nav" style="font-size:.58rem;letter-spacing:.1em;color:var(--gold-dim);display:flex;align-items:center;gap:.4rem">
+      <span class="live-dot"></span>Auto-post
+    </div>
+    <button id="admin-toggle-btn" onclick="toggleAdminSidebar()">⚙ Admin</button>
+  </div>
+</nav>
+
+<!-- BLOG HERO -->
+<div class="blog-hero">
+  <!--
+  ═══════════════════════════════════════════════════════
+  🖼 HƯỚNG DẪN THÊM HÌNH ẢNH — BANNER TRANG BLOG
+  ═══════════════════════════════════════════════════════
+  Thêm ảnh banner bên dưới thẻ <div class="blog-hero">:
+    <img src="images/blog-banner.jpg" alt="Blog Banner"
+         style="position:absolute;inset:0;width:100%;height:100%;
+                object-fit:cover;opacity:0.12;pointer-events:none;">
+  Ảnh gợi ý: cảnh quay phim, bàn edit, landscape — tone tối.
+  Kích thước: 1920×400px. Thêm position:relative vào .blog-hero.
+  ═══════════════════════════════════════════════════════
+  -->
+  <div class="blog-hero-label">Blog Cá Nhân</div>
+  <h1>Ghi chép về<br><em>ánh sáng &amp; chuyển động</em></h1>
+  <p class="blog-hero-sub">Thủ thuật dựng phim, âm nhạc, màu sắc, typography — và những con đường chưa có tên trên bản đồ.</p>
+  <div class="blog-hero-meta">
+    <span><span class="live-dot"></span><span id="post-count-display">0 bài viết</span></span>
+    <span>Cập nhật mỗi tuần</span>
+    <span id="last-post-display"></span>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filter-bar">
+  <button class="filter-btn active" onclick="filterPosts('all',this)">
+    Tất Cả <span class="filter-count" id="cnt-all">0</span>
+  </button>
+  <button class="filter-btn" onclick="filterPosts('filmmaking',this)">
+    Dựng Phim <span class="filter-count" id="cnt-filmmaking">0</span>
+  </button>
+  <button class="filter-btn" onclick="filterPosts('music',this)">
+    Âm Nhạc <span class="filter-count" id="cnt-music">0</span>
+  </button>
+  <button class="filter-btn" onclick="filterPosts('color',this)">
+    Màu Sắc <span class="filter-count" id="cnt-color">0</span>
+  </button>
+  <button class="filter-btn" onclick="filterPosts('typography',this)">
+    Typography <span class="filter-count" id="cnt-typography">0</span>
+  </button>
+  <button class="filter-btn" onclick="filterPosts('travel',this)">
+    Du Lịch Bụi <span class="filter-count" id="cnt-travel">0</span>
+  </button>
+  <button class="filter-btn" onclick="filterPosts('gear',this)">
+    Thiết Bị <span class="filter-count" id="cnt-gear">0</span>
+  </button>
+</div>
+
+<!-- BLOG POSTS GRID -->
+<div class="blog-main">
+  <div class="posts-grid" id="posts-grid">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+<!-- READ MODAL -->
+<div id="read-modal">
+  <button class="read-modal-close" onclick="closeReadModal()">✕</button>
+  <div class="read-modal-inner">
+    <!-- ═══════════════════════════════════════════════
+         🖼 ẢNH ĐẦU BÀI VIẾT — hiển thị tự động từ field thumbnail
+         ═══════════════════════════════════════════════ -->
+    <div id="read-hero-img-wrap"></div>
+    <div class="read-cat" id="rm-cat"></div>
+    <div class="read-title" id="rm-title"></div>
+    <div class="read-meta" id="rm-meta"></div>
+    <div class="read-body" id="rm-body"></div>
+  </div>
+</div>
+
+<!-- ADMIN SIDEBAR -->
+<div class="admin-sidebar" id="admin-sidebar">
+  <div class="admin-sidebar-head">
+    <div class="admin-sidebar-title">Admin</div>
+    <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+  </div>
+  <div class="admin-sidebar-body">
+
+    <!-- ═══ LOGIN GATE ═══ -->
+    <div id="sidebar-login-gate">
+      <div class="sidebar-login">
+        <div class="sidebar-login-icon">🔐</div>
+        <div class="sidebar-login-title">Khu Vực Admin</div>
+        <div class="sidebar-login-sub">Nhập mật khẩu để quản lý blog</div>
+        <div class="sidebar-pw-wrap">
+          <input type="password" id="sidebar-pw" placeholder="Mật khẩu..."
+                 onkeydown="if(event.key==='Enter')doSidebarLogin()"
+                 oninput="document.getElementById('sidebar-err').textContent=''">
+          <button class="sidebar-eye" onclick="toggleSidebarPw()">👁</button>
+        </div>
+        <div class="sidebar-login-err" id="sidebar-err"></div>
+        <button class="sidebar-login-btn" id="sidebar-login-btn" onclick="doSidebarLogin()">Đăng Nhập</button>
+        <div class="sidebar-attempts" id="sidebar-attempts"></div>
+      </div>
+    </div>
+
+    <!-- ═══ ADMIN PANEL (sau khi login) ═══ -->
+    <div id="sidebar-admin-panel" style="display:none">
+
+      <!-- Topbar -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border2)">
+        <div>
+          <div class="admin-topbar-badge"><div class="admin-green-dot"></div>Admin đang hoạt động</div>
+          <div style="font-size:.65rem;color:var(--cream-dim)">Phiên đăng nhập hiện tại</div>
+        </div>
+        <button class="sidebar-logout" onclick="doSidebarLogout()">Đăng Xuất</button>
+      </div>
+
+      <!-- TABS -->
+      <div class="sidebar-tabs">
+        <button class="stab active" onclick="switchStab('write',this)">✍ Viết Bài</button>
+        <button class="stab" onclick="switchStab('ai',this)">⚡ AI Auto</button>
+        <button class="stab" onclick="switchStab('schedule',this)">📅 Lịch</button>
+        <button class="stab" onclick="switchStab('history',this)">📋 Lịch Sử</button>
+      </div>
+
+      <!-- TAB: WRITE -->
+      <div id="stab-write" class="stab-content active">
+        <div class="s-form-row">
+          <label class="s-label">Tiêu Đề</label>
+          <input type="text" class="s-input" id="s-title" placeholder="Tiêu đề bài viết...">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+          <div class="s-form-row">
+            <label class="s-label">Chủ Đề</label>
+            <select class="s-select" id="s-cat">
+              <option value="filmmaking">Dựng Phim</option>
+              <option value="music">Âm Nhạc</option>
+              <option value="color">Màu Sắc</option>
+              <option value="typography">Typography</option>
+              <option value="travel">Du Lịch Bụi</option>
+              <option value="gear">Thiết Bị</option>
+            </select>
+          </div>
+          <div class="s-form-row">
+            <label class="s-label">Thời Gian Đọc</label>
+            <input type="text" class="s-input" id="s-readtime" placeholder="5 phút đọc">
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════
+             🖼 THÊM ẢNH BÌA BÀI VIẾT (Admin → Viết Bài)
+             Chọn 1 trong 3 cách: URL, Unsplash tự động, hoặc AI chọn
+             ═══════════════════════════════════════════════ -->
+        <div class="s-form-row">
+          <label class="s-label">Ảnh Bìa Bài Viết</label>
+          <div class="img-source-tabs">
+            <button class="img-stab active" onclick="switchImgTab('url',this)">🔗 URL</button>
+            <button class="img-stab" onclick="switchImgTab('unsplash',this)">📷 Unsplash</button>
+          </div>
+          <div id="img-tab-url">
+            <input type="text" class="s-input" id="s-thumbnail" placeholder="https://... hoặc images/blog/ten-anh.jpg"
+                   oninput="previewThumbnail(this.value)">
+            <div style="font-size:.58rem;color:var(--cream-dim);margin-top:.3rem">
+              Nhập URL ảnh hoặc đường dẫn local (đặt ảnh trong thư mục <code style="color:var(--gold)">images/blog/</code>)
+            </div>
+          </div>
+          <div id="img-tab-unsplash" style="display:none">
+            <input type="text" class="s-input" id="s-unsplash-keyword" placeholder="Từ khóa: vietnam, filmmaker, travel...">
+            <button onclick="fetchUnsplashImg()" style="margin-top:.5rem;background:none;border:1px solid var(--gold-dim);color:var(--gold-dim);padding:.4rem 1rem;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;font-family:var(--ff-b)" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold-dim)'">Tìm Ảnh Unsplash</button>
+            <div class="img-auto-badge" id="unsplash-credit"></div>
+          </div>
+          <img id="thumb-preview" class="img-preview" src="" alt="Preview">
+        </div>
+
+        <div class="s-form-row">
+          <label class="s-label">Tóm Tắt</label>
+          <textarea class="s-textarea" id="s-excerpt" placeholder="Mô tả ngắn..." style="min-height:70px"></textarea>
+        </div>
+        <div class="s-form-row">
+          <label class="s-label">Nội Dung (HTML cho phép)</label>
+          <textarea class="s-textarea" id="s-content" placeholder="Nội dung bài viết..." style="min-height:180px"></textarea>
+        </div>
+        <button class="s-btn" onclick="publishManual()">📤 Đăng Bài</button>
+      </div>
+
+      <!-- TAB: AI AUTO -->
+      <div id="stab-ai" class="stab-content">
+        <div class="schedule-badge">
+          <strong>Auto-post:</strong> <span id="schedule-info-text">Đang tải...</span>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════
+             🖼 ẢNH TỰ ĐỘNG CHO BÀI AI
+             AI sẽ tự lấy ảnh từ Unsplash theo chủ đề bài viết.
+             Không cần làm gì thêm — hệ thống tự xử lý.
+             Để tắt ảnh tự động: đặt autoFetchImage = false
+             ═══════════════════════════════════════════════ -->
+        <div class="s-form-row">
+          <label class="s-label">Chủ Đề AI Sẽ Viết</label>
+          <select class="s-select" id="ai-topic-s">
+            <option value="filmmaking">Kỹ thuật dựng phim & storytelling</option>
+            <option value="music">Âm nhạc trong video</option>
+            <option value="color">Color grading & màu sắc</option>
+            <option value="typography">Typography & đồ họa</option>
+            <option value="travel">Du lịch bụi cho filmmaker</option>
+            <option value="gear">Thiết bị & phần mềm</option>
+          </select>
+        </div>
+        <div class="s-form-row">
+          <label class="s-label">Giọng Văn</label>
+          <select class="s-select" id="ai-tone-s">
+            <option value="personal">Chia sẻ cá nhân, chân thực</option>
+            <option value="professional">Chuyên nghiệp, có cấu trúc</option>
+            <option value="storytelling">Kể chuyện, giàu cảm xúc</option>
+          </select>
+        </div>
+        <div class="s-form-row">
+          <label class="s-label">Gợi Ý Thêm (tùy chọn)</label>
+          <input type="text" class="s-input" id="ai-hint-s" placeholder="VD: kỹ thuật J-cut, L-cut...">
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-sw" id="auto-img-toggle" onclick="toggleAutoImg()">
+            <div class="thumb"></div>
+          </div>
+          <span class="toggle-label" id="auto-img-label">🖼 Tự động lấy ảnh Unsplash</span>
+        </div>
+        <button class="s-btn" onclick="generateAndPublishAI()">⚡ Tạo &amp; Đăng Bài AI</button>
+        <button class="s-btn-ghost" onclick="generateAIPreview()">👁 Xem Trước Trước</button>
+        <div class="ai-stream" id="ai-stream-s">
+          <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">⚡ AI đang tạo bài...</div>
+          <div id="ai-stream-text"></div>
+        </div>
+        <div id="ai-preview-box" style="display:none;margin-top:1rem;border:1px solid var(--border);padding:1.2rem;background:var(--bg)">
+          <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem">Xem Trước</div>
+          <img id="ai-preview-img" style="width:100%;aspect-ratio:16/9;object-fit:cover;margin-bottom:.8rem;display:none">
+          <div id="ai-preview-title" style="font-family:var(--ff-d);font-size:1.2rem;margin-bottom:.5rem"></div>
+          <div id="ai-preview-excerpt" style="font-size:.75rem;color:var(--cream-dim);margin-bottom:1rem"></div>
+          <button class="s-btn" onclick="publishAIFromPreview()" style="margin-top:0">📤 Đăng Bài Này</button>
+          <button class="s-btn-ghost" onclick="document.getElementById('ai-preview-box').style.display='none'" style="margin-top:0">Hủy</button>
+        </div>
+      </div>
+
+      <!-- TAB: SCHEDULE -->
+      <div id="stab-schedule" class="stab-content">
+        <div class="s-form-row">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+            <label class="s-label" style="margin:0">Auto-Post Tự Động</label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-sw" id="sched-toggle" onclick="toggleSchedEnabled()">
+              <div class="thumb"></div>
+            </div>
+            <span class="toggle-label" id="sched-label">Đang Bật</span>
+          </div>
+        </div>
+        <div class="s-form-row">
+          <label class="s-label">Ngày Đăng Trong Tuần</label>
+          <select class="s-select" id="sched-day-s">
+            <option value="1">Thứ Hai</option><option value="2">Thứ Ba</option>
+            <option value="3">Thứ Tư</option><option value="4">Thứ Năm</option>
+            <option value="5" selected>Thứ Sáu</option>
+            <option value="6">Thứ Bảy</option><option value="0">Chủ Nhật</option>
+          </select>
+        </div>
+        <div class="s-form-row">
+          <label class="s-label">Luân Phiên Chủ Đề</label>
+          <select class="s-select" id="sched-rotation-s">
+            <option value="random">Ngẫu nhiên</option>
+            <option value="mixed">Xen kẽ tất cả chủ đề</option>
+            <option value="filmmaking">Chỉ dựng phim</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-sw" id="sched-img-toggle" onclick="toggleSchedImg()">
+            <div class="thumb"></div>
+          </div>
+          <span class="toggle-label">🖼 Tự động chèn ảnh cho bài tự động</span>
+        </div>
+        <button class="s-btn" onclick="saveScheduleSettings()">💾 Lưu Lịch</button>
+        <div class="schedule-badge" style="margin-top:1.2rem">
+          <strong>Bài tiếp theo:</strong><br>
+          <span id="next-post-schedule-label">Đang tính...</span>
+        </div>
+      </div>
+
+      <!-- TAB: HISTORY -->
+      <div id="stab-history" class="stab-content">
+        <div style="margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim)"><span id="history-count">0</span> bài viết</div>
+          <button onclick="loadHistory()" style="background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.3rem .6rem;font-size:.58rem;cursor:pointer;transition:all .3s;font-family:var(--ff-b)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--cream-dim)'">↻ Làm Mới</button>
+        </div>
+        <div id="history-list"></div>
+      </div>
+    </div><!-- end sidebar-admin-panel -->
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// 🔐 ADMIN AUTHENTICATION
+// MẬT KHẨU MẶC ĐỊNH: KhungHinh@2025
+// Đổi mật khẩu: sửa constant ADMIN_PW_PLAIN dưới đây,
+// sau đó xóa localStorage key 'kh_admin_ref' để reset.
+// ═══════════════════════════════════════════════════════════
+const ADMIN_PW_PLAIN = 'KhungHinh@2025';
+const MAX_ATT = 5;
+const LOCK_MS = 15 * 60 * 1000;
+
+const CAT_LABELS = {
+  filmmaking:'Dựng Phim', music:'Âm Nhạc', color:'Màu Sắc',
+  typography:'Typography', travel:'Du Lịch Bụi', gear:'Thiết Bị'
+};
+
+// Màu gradient placeholder theo chủ đề
+const CAT_GRADIENTS = {
+  filmmaking:'linear-gradient(135deg,#1a0f05,#2d1a08)',
+  music:'linear-gradient(135deg,#080d14,#0f1e2d)',
+  color:'linear-gradient(135deg,#0d0a12,#1a1226)',
+  travel:'linear-gradient(135deg,#0a100a,#142014)',
+  typography:'linear-gradient(135deg,#14060a,#260c14)',
+  gear:'linear-gradient(135deg,#0f0d08,#211c0e)'
+};
+
+// Emoji icon cho placeholder theo chủ đề
+const CAT_ICONS = {
+  filmmaking:'🎬', music:'🎵', color:'🎨', travel:'🧭', typography:'✍', gear:'📷'
+};
+
+// UNSPLASH KEYWORDS theo chủ đề (dùng ảnh public/miễn phí)
+const UNSPLASH_KEYWORDS = {
+  filmmaking:'filmmaking cinema camera',
+  music:'music studio headphones',
+  color:'color palette light',
+  travel:'travel vietnam backpacker',
+  typography:'typography design font',
+  gear:'camera equipment photography'
+};
+
+let sidebarLoggedIn = false;
+let autoFetchImage  = true;
+let autoSchedImg    = true;
+let schedEnabled    = true;
+let aiPostBuffer    = null;
+let currentFilter   = 'all';
+const POSTS_PER_PAGE = 6;
+let currentPage = 1;
+
+let posts = JSON.parse(localStorage.getItem('kh_posts') || 'null') || [
+  {id:1,title:'Nhịp Cắt — Linh Hồn Của Một Bộ Phim',cat:'filmmaking',excerpt:'Tại sao một bộ phim hay không nằm ở máy quay đắt tiền, mà nằm ở khoảnh khắc bạn quyết định cắt?',
+   thumbnail:'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=70',
+   content:`<h3>Nhịp cắt là cảm xúc</h3><p>Khi học về biên tập video, điều đầu tiên tôi được dạy là: "Đừng cắt theo logic, hãy cắt theo cảm xúc." Câu đó tưởng trừu tượng, nhưng thực ra là nền tảng của mọi storytelling bằng hình ảnh.</p><blockquote>Mỗi nhát cắt là một câu trong bản nhạc cảm xúc bạn đang soạn cho người xem.</blockquote><h3>Ba loại nhịp cắt</h3><ul><li><strong>Cut on action:</strong> Cắt ngay khi nhân vật đang chuyển động — tạo sự liền mạch tự nhiên.</li><li><strong>Cut on beat:</strong> Cắt theo nhịp nhạc — tạo năng lượng và rhythm.</li><li><strong>Cut on emotion:</strong> Cắt khi cảm xúc đạt đỉnh — để khoảng lặng nói thay lời.</li></ul>`,
+   date:'16/05/2025',readtime:'6 phút đọc',featured:true},
+  {id:2,title:'Âm Nhạc Trong Video: Chọn Nhạc Như Thế Nào?',cat:'music',excerpt:'Nhạc nền không phải trang trí — nó là lớp kể chuyện thứ hai, song hành với hình ảnh.',
+   thumbnail:'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=70',
+   content:`<h3>Nhạc là subtext của video</h3><p>Thử một thí nghiệm: lấy cùng một cảnh quay mặt trời lặn, lần lượt đặt nhạc buồn và nhạc hùng tráng. Hai thứ hoàn toàn khác nhau ra đời.</p><blockquote>Nhạc tốt không làm bạn nghe thấy — nó làm bạn cảm thấy mà không nhận ra.</blockquote>`,
+   date:'09/05/2025',readtime:'5 phút đọc',featured:false},
+  {id:3,title:'Hà Giang Bằng Xe Máy: Cung Đường Của Người Chọn Khó',cat:'travel',excerpt:'Không có bản đồ offline tốt, không biết tiếng địa phương, không quen đường núi — và tôi đã làm điều đó một mình.',
+   thumbnail:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=70',
+   content:`<h3>Tại sao phải đi một mình?</h3><p>Đi một mình không phải cô đơn — đó là tự do tuyệt đối. Không ai quyết định dừng hay đi thay bạn.</p><blockquote>Hà Giang không phải điểm đến. Nó là bài kiểm tra xem bạn đang sống hay chỉ đang tồn tại.</blockquote>`,
+   date:'02/05/2025',readtime:'8 phút đọc',featured:false}
+];
+
+// ── AUTH ──
+async function hashPw(pw){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw+'KH_SALT_2025'));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function initHash(){
+  if(!sessionStorage.getItem('kh_blog_ref')){
+    sessionStorage.setItem('kh_blog_ref', await hashPw(ADMIN_PW_PLAIN));
+  }
+}
+
+function getAttempts(){ return JSON.parse(localStorage.getItem('kh_blog_att')||'{"n":0,"t":0}') }
+function saveAttempts(a){ localStorage.setItem('kh_blog_att', JSON.stringify(a)) }
+function checkLock(){
+  const a=getAttempts();
+  if(a.n>=MAX_ATT){ const e=Date.now()-a.t; if(e<LOCK_MS) return Math.ceil((LOCK_MS-e)/60000); else saveAttempts({n:0,t:0}); }
+  return null;
+}
+
+async function doSidebarLogin(){
+  const btn=document.getElementById('sidebar-login-btn');
+  const err=document.getElementById('sidebar-err');
+  const pw=document.getElementById('sidebar-pw').value;
+  const lock=checkLock();
+  if(lock){err.textContent=`🔒 Bị khóa ${lock} phút nữa.`;return;}
+  if(!pw){err.textContent='Nhập mật khẩu.';return;}
+  btn.disabled=true; btn.textContent='Đang kiểm tra...';
+  try{
+    const h=await hashPw(pw);
+    const ref=sessionStorage.getItem('kh_blog_ref');
+    if(h===ref){
+      sidebarLoggedIn=true; sessionStorage.setItem('kh_blog_session','true');
+      saveAttempts({n:0,t:0});
+      document.getElementById('sidebar-login-gate').style.display='none';
+      document.getElementById('sidebar-admin-panel').style.display='block';
+      loadHistory(); updateScheduleUI(); updateAutoImgUI(); updateSchedImgUI(); updateScheduleNextLabel();
+      showToast('✓ Đăng nhập admin thành công.');
+    } else {
+      const a=getAttempts(); a.n++; a.t=Date.now(); saveAttempts(a);
+      const left=MAX_ATT-a.n;
+      if(a.n>=MAX_ATT){err.textContent='🔒 Quá nhiều lần thử. Bị khóa 15 phút.';}
+      else{err.textContent=`✕ Sai mật khẩu. Còn ${left} lần.`;}
+      document.getElementById('sidebar-pw').style.animation='shake .3s ease';
+      document.getElementById('sidebar-pw').style.borderColor='#8B3A3A';
+      setTimeout(()=>{document.getElementById('sidebar-pw').style.animation='';document.getElementById('sidebar-pw').style.borderColor='';},400);
+    }
+  }catch(e){err.textContent='Lỗi xác thực.';}
+  btn.disabled=false; btn.textContent='Đăng Nhập';
+}
+
+function doSidebarLogout(){
+  sidebarLoggedIn=false; sessionStorage.removeItem('kh_blog_session');
+  document.getElementById('sidebar-admin-panel').style.display='none';
+  document.getElementById('sidebar-login-gate').style.display='block';
+  document.getElementById('sidebar-pw').value='';
+  document.getElementById('sidebar-err').textContent='';
+  document.getElementById('admin-toggle-btn').classList.remove('active');
+  closeSidebar();
+  showToast('Đã đăng xuất.');
+}
+
+function toggleSidebarPw(){
+  const i=document.getElementById('sidebar-pw');
+  i.type=i.type==='password'?'text':'password';
+}
+
+// ── SIDEBAR ──
+function toggleAdminSidebar(){
+  const sb=document.getElementById('admin-sidebar');
+  const btn=document.getElementById('admin-toggle-btn');
+  if(sb.classList.contains('open')){
+    sb.classList.remove('open'); btn.classList.remove('active');
+  } else {
+    sb.classList.add('open'); btn.classList.add('active');
+    const hasSess=sessionStorage.getItem('kh_blog_session')==='true';
+    if(hasSess&&sidebarLoggedIn){
+      document.getElementById('sidebar-login-gate').style.display='none';
+      document.getElementById('sidebar-admin-panel').style.display='block';
+    } else {
+      sidebarLoggedIn=false;
+      document.getElementById('sidebar-login-gate').style.display='block';
+      document.getElementById('sidebar-admin-panel').style.display='none';
+      setTimeout(()=>document.getElementById('sidebar-pw')?.focus(),300);
+    }
+  }
+}
+function closeSidebar(){
+  document.getElementById('admin-sidebar').classList.remove('open');
+  document.getElementById('admin-toggle-btn').classList.remove('active');
+}
+
+function switchStab(name, btn){
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.stab-content').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('stab-'+name).classList.add('active');
+}
+
+// ── IMAGE HELPERS ──
+function switchImgTab(name, btn){
+  document.querySelectorAll('.img-stab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('img-tab-url').style.display=name==='url'?'block':'none';
+  document.getElementById('img-tab-unsplash').style.display=name==='unsplash'?'block':'none';
+}
+
+function previewThumbnail(url){
+  const img=document.getElementById('thumb-preview');
+  if(url){ img.src=url; img.classList.add('show'); }
+  else{ img.classList.remove('show'); }
+}
+
+async function fetchUnsplashImg(){
+  const kw=document.getElementById('s-unsplash-keyword').value.trim()||'filmmaker vietnam';
+  const credit=document.getElementById('unsplash-credit');
+  credit.textContent='Đang tìm ảnh...';
+  try{
+    // Dùng Unsplash Source API (không cần key, ảnh ngẫu nhiên theo từ khóa)
+    // ═══════════════════════════════════════════════════════════════════
+    // 🔑 ĐỂ DÙNG UNSPLASH API CHÍNH THỨC (chất lượng cao hơn):
+    // 1. Đăng ký tại https://unsplash.com/developers
+    // 2. Tạo app, lấy Access Key
+    // 3. Thay URL dưới đây thành:
+    //    https://api.unsplash.com/photos/random?query=${kw}&orientation=landscape
+    //    Thêm header: Authorization: Client-ID YOUR_ACCESS_KEY
+    // ═══════════════════════════════════════════════════════════════════
+    const url=`https://source.unsplash.com/featured/800x450/?${encodeURIComponent(kw)}&${Date.now()}`;
+    document.getElementById('s-thumbnail').value=url;
+    previewThumbnail(url);
+    credit.textContent='✓ Ảnh từ Unsplash · ' + kw;
+  } catch(e){ credit.textContent='Lỗi tải ảnh. Dùng URL thủ công.'; }
+}
+
+async function getAutoImage(cat){
+  if(!autoFetchImage) return null;
+  const kw=UNSPLASH_KEYWORDS[cat]||'creative photography';
+  return `https://source.unsplash.com/featured/800x450/?${encodeURIComponent(kw)}&${Date.now()}`;
+}
+
+function toggleAutoImg(){
+  autoFetchImage=!autoFetchImage;
+  updateAutoImgUI();
+}
+function updateAutoImgUI(){
+  const t=document.getElementById('auto-img-toggle');
+  const l=document.getElementById('auto-img-label');
+  if(!t)return;
+  if(autoFetchImage){ t.classList.remove('off'); l.textContent='🖼 Tự động lấy ảnh Unsplash'; }
+  else{ t.classList.add('off'); l.textContent='🚫 Không lấy ảnh tự động'; }
+}
+
+function toggleSchedImg(){
+  autoSchedImg=!autoSchedImg; updateSchedImgUI();
+  localStorage.setItem('kh_sched_img',JSON.stringify(autoSchedImg));
+}
+function updateSchedImgUI(){
+  const t=document.getElementById('sched-img-toggle');
+  if(!t)return;
+  if(autoSchedImg){ t.classList.remove('off'); }
+  else{ t.classList.add('off'); }
+}
+
+// ── RENDER ──
+function filteredPosts(){
+  return currentFilter==='all' ? posts : posts.filter(p=>p.cat===currentFilter);
+}
+
+function renderPosts(){
+  const grid=document.getElementById('posts-grid');
+  const paged=filteredPosts();
+  const total=paged.length;
+  const start=(currentPage-1)*POSTS_PER_PAGE;
+  const slice=paged.slice(start, start+POSTS_PER_PAGE);
+
+  document.getElementById('post-count-display').textContent=`${posts.length} bài viết`;
+  if(posts.length>0){
+    const latest=posts[0];
+    document.getElementById('last-post-display').textContent='Bài mới: '+latest.date;
+  }
+
+  // Update filter counts
+  const cats=['all','filmmaking','music','color','typography','travel','gear'];
+  cats.forEach(c=>{
+    const el=document.getElementById('cnt-'+c);
+    if(el) el.textContent=c==='all'?posts.length:posts.filter(p=>p.cat===c).length;
+  });
+
+  if(!slice.length){
+    grid.innerHTML=`<div class="empty-state"><h3>Chưa có bài viết</h3><p>Các bài viết sẽ xuất hiện ở đây sau khi được đăng.</p></div>`;
+    document.getElementById('pagination').innerHTML='';
+    return;
+  }
+
+  let html='';
+  slice.forEach((p,i)=>{
+    const isFeatured = i===0 && currentPage===1 && currentFilter==='all';
+    const imgEl = p.thumbnail
+      ? `<img src="${p.thumbnail}" alt="${p.title}" loading="lazy">`
+      : `<div class="post-card-img-placeholder" style="background:${CAT_GRADIENTS[p.cat]||'var(--surface2)'}"><span>${CAT_ICONS[p.cat]||'📝'}</span></div>`;
+
+    html+=`<div class="post-card${isFeatured?' featured-card':''}" onclick="openReadModal(${p.id})">
+      <div class="post-card-img" ${isFeatured?'style="min-height:280px"':''}>
+        ${imgEl}
+        <span class="post-img-cat-badge">${CAT_LABELS[p.cat]||p.cat}</span>
+        ${p.aiGenerated?'<span class="ai-badge">AI</span>':''}
+      </div>
+      <div class="post-card-body">
+        <div class="post-cat">${CAT_LABELS[p.cat]||p.cat}</div>
+        <div class="post-title">${p.title}</div>
+        <div class="post-excerpt">${p.excerpt}</div>
+        <div class="post-meta">
+          <span>${p.date}</span>
+          <span class="post-readtime">${p.readtime||'5 phút'}</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML=html;
+
+  // Pagination
+  const totalPages=Math.ceil(total/POSTS_PER_PAGE);
+  let pages='';
+  if(totalPages>1){
+    if(currentPage>1) pages+=`<button class="page-btn" onclick="goPage(${currentPage-1})">←</button>`;
+    for(let i=1;i<=totalPages;i++){
+      pages+=`<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
+    }
+    if(currentPage<totalPages) pages+=`<button class="page-btn" onclick="goPage(${currentPage+1})">→</button>`;
+  }
+  document.getElementById('pagination').innerHTML=pages;
+}
+
+function goPage(p){ currentPage=p; renderPosts(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function filterPosts(cat, btn){
+  currentFilter=cat; currentPage=1;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPosts();
+}
+
+// ── READ MODAL ──
+function openReadModal(id){
+  const p=posts.find(x=>x.id===id); if(!p)return;
+  const imgWrap=document.getElementById('read-hero-img-wrap');
+  // ═══════════════════════════════════════════════
+  // 🖼 ẢNH BÌA KHI ĐỌC BÀI — render từ field thumbnail
+  // ═══════════════════════════════════════════════
+  if(p.thumbnail){
+    imgWrap.innerHTML=`<img src="${p.thumbnail}" alt="${p.title}" class="read-hero-img">`;
+  } else {
+    imgWrap.innerHTML=`<div class="read-hero-img-placeholder" style="background:${CAT_GRADIENTS[p.cat]||'var(--surface)'}"><span style="font-size:3rem;opacity:.2">${CAT_ICONS[p.cat]||'📝'}</span></div>`;
+  }
+  document.getElementById('rm-cat').textContent=(CAT_LABELS[p.cat]||p.cat)+(p.aiGenerated?' · AI Generated':'');
+  document.getElementById('rm-title').textContent=p.title;
+  document.getElementById('rm-meta').innerHTML=`<span>${p.date}</span><span>${p.readtime||'5 phút đọc'}</span><span>by Khung Hình</span>`;
+  document.getElementById('rm-body').innerHTML=p.content||'<p>Nội dung đang được cập nhật...</p>';
+  document.getElementById('read-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeReadModal(){
+  document.getElementById('read-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── PUBLISH ──
+function publishManual(){
+  const title=document.getElementById('s-title').value.trim();
+  const cat=document.getElementById('s-cat').value;
+  const excerpt=document.getElementById('s-excerpt').value.trim();
+  const content=document.getElementById('s-content').value.trim();
+  const readtime=document.getElementById('s-readtime').value.trim()||'5 phút đọc';
+  const thumbnail=document.getElementById('s-thumbnail').value.trim()||null;
+  if(!title||!excerpt){showToast('Vui lòng điền Tiêu đề và Tóm tắt.');return;}
+  const p={
+    id:Date.now(),title,cat,excerpt,
+    content:`<p>${content.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</p>`,
+    thumbnail,date:new Date().toLocaleDateString('vi-VN'),readtime,featured:false
+  };
+  posts.unshift(p); savePosts(); renderPosts(); loadHistory();
+  document.getElementById('s-title').value='';document.getElementById('s-excerpt').value='';
+  document.getElementById('s-content').value='';document.getElementById('s-thumbnail').value='';
+  document.getElementById('thumb-preview').classList.remove('show');
+  showToast('✓ Bài viết đã được đăng!');
+}
+
+// ── AI POST ──
+async function generateAICore(topic, tone, hint, fetchImg){
+  const TOPIC_PROMPTS={
+    filmmaking:'kỹ thuật biên tập video và storytelling',
+    music:'cách chọn và sử dụng âm nhạc trong video',
+    color:'color grading và tone màu cinematic',
+    typography:'typography và bố cục trong đồ họa',
+    travel:'mẹo du lịch bụi cho filmmaker',
+    gear:'thiết bị quay phim và phần mềm edit'
+  };
+  const TONE_NOTES={
+    personal:'Viết theo phong cách cá nhân, chia sẻ kinh nghiệm thực tế',
+    professional:'Viết chuyên nghiệp, cấu trúc rõ ràng với tips cụ thể',
+    storytelling:'Viết như kể chuyện, giàu cảm xúc và hình ảnh'
+  };
+  const prompt=`Bạn là video editor và filmmaker Việt Nam. Viết bài blog (400-500 chữ) về: ${TOPIC_PROMPTS[topic]||topic}.${hint?'\nGợi ý: '+hint:''}
+Phong cách: ${TONE_NOTES[tone]||TONE_NOTES.personal}.
+Trả về JSON (KHÔNG backtick): {"title":"...","excerpt":"1-2 câu tóm tắt","readtime":"X phút đọc","content":"HTML với h3, p, blockquote, ul/li"}`;
+
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+  });
+  const data=await res.json();
+  const text=data.content?.map(c=>c.text||'').join('')||'';
+  const clean=text.replace(/```json|```/g,'').trim();
+  let parsed;
+  try{ parsed=JSON.parse(clean); }
+  catch{ parsed={title:`Bài về ${TOPIC_PROMPTS[topic]}`,excerpt:'Nội dung AI.',readtime:'5 phút đọc',content:`<p>${text.substring(0,500)}</p>`}; }
+  if(fetchImg) parsed.thumbnail = await getAutoImage(topic);
+  return parsed;
+}
+
+async function generateAIPreview(){
+  const topic=document.getElementById('ai-topic-s').value;
+  const tone=document.getElementById('ai-tone-s').value;
+  const hint=document.getElementById('ai-hint-s').value;
+  const stream=document.getElementById('ai-stream-s');
+  const stext=document.getElementById('ai-stream-text');
+  const preview=document.getElementById('ai-preview-box');
+  stream.classList.add('show'); stext.textContent='Đang tạo bài...'; preview.style.display='none';
+  try{
+    const parsed=await generateAICore(topic,tone,hint,autoFetchImage);
+    aiPostBuffer={...parsed,cat:topic};
+    stext.textContent='✓ Xong!';
+    document.getElementById('ai-preview-title').textContent=parsed.title;
+    document.getElementById('ai-preview-excerpt').textContent=parsed.excerpt;
+    const pimg=document.getElementById('ai-preview-img');
+    if(parsed.thumbnail){ pimg.src=parsed.thumbnail; pimg.style.display='block'; }
+    else pimg.style.display='none';
+    preview.style.display='block';
+  }catch(e){ stext.textContent='Lỗi: '+e.message; }
+}
+
+async function generateAndPublishAI(){
+  const topic=document.getElementById('ai-topic-s').value;
+  const tone=document.getElementById('ai-tone-s').value;
+  const hint=document.getElementById('ai-hint-s').value;
+  const stream=document.getElementById('ai-stream-s');
+  const stext=document.getElementById('ai-stream-text');
+  stream.classList.add('show'); stext.textContent='AI đang viết bài...';
+  try{
+    const parsed=await generateAICore(topic,tone,hint,autoFetchImage);
+    const p={id:Date.now(),...parsed,cat:topic,date:new Date().toLocaleDateString('vi-VN'),featured:false,aiGenerated:true};
+    posts.unshift(p); savePosts(); renderPosts(); loadHistory();
+    localStorage.setItem('kh_last_auto',new Date().toISOString());
+    stext.textContent='✓ Bài đã được đăng!';
+    setTimeout(()=>stream.classList.remove('show'),3000);
+    showToast('⚡ Bài AI đã đăng thành công!');
+  }catch(e){ stext.textContent='Lỗi: '+e.message; }
+}
+
+function publishAIFromPreview(){
+  if(!aiPostBuffer)return;
+  const p={id:Date.now(),...aiPostBuffer,date:new Date().toLocaleDateString('vi-VN'),featured:false,aiGenerated:true};
+  posts.unshift(p); savePosts(); renderPosts(); loadHistory();
+  localStorage.setItem('kh_last_auto',new Date().toISOString());
+  document.getElementById('ai-preview-box').style.display='none';
+  document.getElementById('ai-stream-s').classList.remove('show');
+  aiPostBuffer=null;
+  showToast('✓ Bài đã được đăng!');
+}
+
+// ── SCHEDULE ──
+function toggleSchedEnabled(){
+  schedEnabled=!schedEnabled;
+  const t=document.getElementById('sched-toggle');
+  const l=document.getElementById('sched-label');
+  if(schedEnabled){ t.classList.remove('off'); l.textContent='Đang Bật'; }
+  else{ t.classList.add('off'); l.textContent='Đang Tắt'; }
+  localStorage.setItem('kh_sched_enabled',JSON.stringify(schedEnabled));
+}
+function updateScheduleUI(){
+  schedEnabled=JSON.parse(localStorage.getItem('kh_sched_enabled')||'true');
+  autoSchedImg=JSON.parse(localStorage.getItem('kh_sched_img')||'true');
+  const t=document.getElementById('sched-toggle');
+  if(t){ if(schedEnabled) t.classList.remove('off'); else t.classList.add('off'); }
+  const l=document.getElementById('sched-label');
+  if(l) l.textContent=schedEnabled?'Đang Bật':'Đang Tắt';
+}
+function saveScheduleSettings(){
+  const day=document.getElementById('sched-day-s').value;
+  const rotation=document.getElementById('sched-rotation-s').value;
+  localStorage.setItem('kh_sched',JSON.stringify({day,rotation}));
+  localStorage.setItem('kh_sched_enabled',JSON.stringify(schedEnabled));
+  localStorage.setItem('kh_sched_img',JSON.stringify(autoSchedImg));
+  updateScheduleNextLabel();
+  showToast('✓ Đã lưu lịch đăng!');
+  checkAutoPost();
+}
+function updateScheduleNextLabel(){
+  const s=JSON.parse(localStorage.getItem('kh_sched')||'{"day":"5"}');
+  const days=['CN','T2','T3','T4','T5','T6','T7'];
+  const d=parseInt(s.day); const now=new Date();
+  const diff=(d-now.getDay()+7)%7||7;
+  const next=new Date(now); next.setDate(now.getDate()+diff);
+  const label=`${days[d]}, ${next.toLocaleDateString('vi-VN')}`;
+  const el=document.getElementById('next-post-schedule-label');
+  if(el) el.textContent=label;
+  const si=document.getElementById('schedule-info-text');
+  if(si) si.textContent=`Mỗi ${days[d]} · Tiếp: ${next.toLocaleDateString('vi-VN')}`;
+}
+
+async function checkAutoPost(){
+  if(!schedEnabled) return;
+  const s=JSON.parse(localStorage.getItem('kh_sched')||'{"day":"5","rotation":"random"}');
+  const last=localStorage.getItem('kh_last_auto');
+  const now=new Date();
+  if(now.getDay()!==parseInt(s.day)) return;
+  if(last){ const diff=(now-new Date(last))/(1000*60*60*24); if(diff<6) return; }
+  const topics=['filmmaking','music','color','typography','travel','gear'];
+  let topic;
+  if(s.rotation==='mixed'){ topic=topics[posts.filter(p=>p.aiGenerated).length%topics.length]; }
+  else if(s.rotation==='filmmaking'){ topic='filmmaking'; }
+  else{ topic=topics[Math.floor(Math.random()*topics.length)]; }
+  const fetchImg=JSON.parse(localStorage.getItem('kh_sched_img')||'true');
+  try{
+    const parsed=await generateAICore(topic,'personal','',fetchImg);
+    const p={id:Date.now(),...parsed,cat:topic,date:now.toLocaleDateString('vi-VN'),featured:false,aiGenerated:true};
+    posts.unshift(p); savePosts(); renderPosts();
+    localStorage.setItem('kh_last_auto',now.toISOString());
+    showToast('⚡ Auto-post: Bài mới đã được đăng!');
+  }catch(e){ console.log('Auto-post err:',e); }
+}
+
+// ── HISTORY ──
+function loadHistory(){
+  const el=document.getElementById('history-list');
+  const cnt=document.getElementById('history-count');
+  if(cnt) cnt.textContent=posts.length;
+  if(!posts.length){ if(el) el.innerHTML='<div style="font-size:.75rem;color:var(--cream-dim);padding:1rem 0">Chưa có bài nào.</div>'; return; }
+  if(el) el.innerHTML=posts.slice(0,20).map(p=>`
+    <div class="history-item">
+      <div class="history-item-info">
+        <div class="history-item-title">${p.title}</div>
+        <div class="history-item-meta">${p.date} · ${CAT_LABELS[p.cat]||p.cat}${p.aiGenerated?' · AI':''}</div>
+      </div>
+      <button class="history-del" onclick="deletePost(${p.id})">✕</button>
+    </div>`).join('');
+}
+
+function deletePost(id){
+  posts=posts.filter(p=>p.id!==id); savePosts(); renderPosts(); loadHistory();
+  showToast('Đã xóa bài viết.');
+}
+function savePosts(){ localStorage.setItem('kh_posts',JSON.stringify(posts)); }
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ── INIT ──
+initHash();
+renderPosts();
+updateScheduleNextLabel();
+checkAutoPost();
+// Khôi phục session
+if(sessionStorage.getItem('kh_blog_session')==='true') sidebarLoggedIn=true;
+</script>
+</body>
+</html>
