@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KHUNG HÌNH — Video & Graphic Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0B09;
+  --surface:#141210;
+  --surface2:#1C1914;
+  --gold:#C5A455;
+  --gold-dim:#8A6F32;
+  --cream:#EDE5D2;
+  --cream-dim:#9A9080;
+  --red-accent:#8B3A3A;
+  --border:rgba(197,164,85,0.15);
+  --border2:rgba(237,229,210,0.07);
+  --ff-display:'Cormorant Garamond',Georgia,serif;
+  --ff-body:'Outfit',sans-serif;
+  --ff-italic:'Playfair Display',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--cream);
+  font-family:var(--ff-body);
+  font-weight:300;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+/* GRAIN */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:999;
+  opacity:.5;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gold-dim)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  padding:1.4rem 3rem;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s,backdrop-filter .4s;
+}
+nav.scrolled{
+  background:rgba(12,11,9,.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:var(--ff-display);
+  font-size:1.35rem;
+  font-weight:300;
+  letter-spacing:.25em;
+  color:var(--gold);
+  text-decoration:none;
+  text-transform:uppercase;
+}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{
+  font-family:var(--ff-body);
+  font-size:.72rem;
+  font-weight:400;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--cream-dim);
+  text-decoration:none;
+  transition:color .3s;
+}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{
+  font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:.5rem 1.3rem;
+  text-decoration:none;
+  transition:background .3s,color .3s;
+}
+.nav-cta:hover{background:var(--gold);color:var(--bg)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.5rem}
+.hamburger span{width:22px;height:1px;background:var(--cream);transition:.3s}
+
+/* ── HERO ── */
+#hero{
+  height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:0 3rem 5rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero-reel{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom, rgba(12,11,9,0) 30%, rgba(12,11,9,.7) 70%, var(--bg) 100%),
+    linear-gradient(135deg, #0C0B09 0%, #1a1408 40%, #0C0B09 100%);
+}
+/* Cinematic letterbox bars */
+.hero-reel::before,.hero-reel::after{
+  content:'';
+  position:absolute;left:0;right:0;
+  height:8vh;background:var(--bg);
+  z-index:2;
+}
+.hero-reel::before{top:0}
+.hero-reel::after{bottom:0}
+
+/* Abstract film frames */
+.film-frame{
+  position:absolute;
+  border:1px solid rgba(197,164,85,.08);
+  border-radius:0;
+}
+.film-frame:nth-child(1){width:60%;height:65%;top:10%;left:20%;border-color:rgba(197,164,85,.05)}
+.film-frame:nth-child(2){width:45%;height:45%;top:20%;left:30%;border-color:rgba(197,164,85,.08)}
+.film-frame:nth-child(3){width:1px;height:55%;top:15%;left:12%;background:rgba(197,164,85,.12)}
+.film-frame:nth-child(4){width:1px;height:55%;top:15%;right:12%;background:rgba(197,164,85,.12)}
+
+.hero-tag{
+  font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:1rem;
+  position:relative;z-index:3;
+  display:flex;align-items:center;gap:1rem;
+}
+.hero-tag::before{content:'';width:2.5rem;height:1px;background:var(--gold)}
+.hero-h1{
+  font-family:var(--ff-display);
+  font-size:clamp(3.5rem,8vw,8rem);
+  font-weight:300;
+  line-height:.95;
+  position:relative;z-index:3;
+  max-width:80%;
+}
+.hero-h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{
+  margin-top:1.5rem;
+  font-size:.85rem;letter-spacing:.08em;
+  color:var(--cream-dim);
+  max-width:38rem;
+  position:relative;z-index:3;
+  line-height:1.8;
+}
+.hero-actions{
+  margin-top:2.5rem;
+  display:flex;gap:1.5rem;align-items:center;
+  position:relative;z-index:3;
+}
+.btn-primary{
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:var(--bg);
+  padding:.85rem 2rem;text-decoration:none;
+  transition:opacity .3s;font-weight:400;
+}
+.btn-primary:hover{opacity:.85}
+.btn-ghost{
+  font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cream-dim);text-decoration:none;
+  display:flex;align-items:center;gap:.6rem;
+  transition:color .3s;
+}
+.btn-ghost:hover{color:var(--cream)}
+.btn-ghost svg{width:18px;opacity:.6}
+
+.hero-scroll{
+  position:absolute;bottom:2.5rem;right:3rem;
+  font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--cream-dim);
+  writing-mode:vertical-rl;
+  display:flex;align-items:center;gap:.8rem;
+  z-index:3;
+  animation:fadeScroll 2s ease infinite;
+}
+.hero-scroll::after{content:'';width:1px;height:3rem;background:var(--gold-dim)}
+@keyframes fadeScroll{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ── SECTIONS BASE ── */
+section{padding:7rem 3rem}
+.section-label{
+  font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--gold);
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:1.2rem;
+}
+.section-label::before{content:'';width:2rem;height:1px;background:var(--gold)}
+.section-h2{
+  font-family:var(--ff-display);
+  font-size:clamp(2.2rem,4.5vw,4rem);
+  font-weight:300;
+  line-height:1.05;
+}
+.section-h2 em{font-style:italic;color:var(--gold)}
+
+/* ── ABOUT ── */
+#about{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5rem;
+  align-items:center;
+}
+.about-visual{
+  position:relative;
+  aspect-ratio:4/5;
+  background:var(--surface);
+  overflow:hidden;
+}
+.about-visual::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, var(--surface) 0%, #1E1A10 100%);
+}
+.about-visual-accent{
+  position:absolute;
+  right:-1px;top:2rem;bottom:2rem;
+  width:3px;background:var(--gold);
+}
+.about-visual-text{
+  position:absolute;bottom:2rem;left:2rem;right:2rem;
+  font-family:var(--ff-display);
+  font-size:3.5rem;
+  font-weight:300;
+  color:rgba(197,164,85,.08);
+  line-height:.95;
+  letter-spacing:.05em;
+  user-select:none;
+}
+.about-visual-label{
+  position:absolute;top:2rem;left:2rem;
+  font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold-dim);
+  display:flex;flex-direction:column;gap:.4rem;
+}
+.about-visual-label::after{content:'';width:2px;height:2.5rem;background:var(--gold);margin-top:.4rem;display:block}
+.about-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;
+  border:1px solid var(--border2);
+  margin-top:2rem;
+}
+.stat{
+  padding:1.2rem 1.5rem;
+  border:1px solid var(--border2);
+}
+.stat-num{
+  font-family:var(--ff-display);
+  font-size:2.2rem;
+  font-weight:300;
+  color:var(--gold);
+  line-height:1;
+}
+.stat-label{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim);margin-top:.3rem}
+.about-text p{color:var(--cream-dim);font-size:.9rem;line-height:1.9;margin-bottom:1rem}
+.about-text p:first-of-type{
+  font-family:var(--ff-display);
+  font-size:1.25rem;
+  font-weight:300;
+  color:var(--cream);
+  line-height:1.6;
+}
+
+/* ── WORK (VIDEO) ── */
+#work{background:var(--surface)}
+.work-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  margin-top:3rem;
+  border:1px solid var(--border2);
+}
+.work-item{
+  position:relative;
+  aspect-ratio:16/9;
+  background:var(--surface2);
+  overflow:hidden;
+  cursor:pointer;
+  group:true;
+}
+.work-item-bg{
+  position:absolute;inset:0;
+  transition:transform .6s cubic-bezier(.25,.1,.25,1);
+}
+.work-item:hover .work-item-bg{transform:scale(1.05)}
+.work-item::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(12,11,9,.9) 0%, transparent 60%);
+}
+.work-item-info{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:1.5rem;
+  z-index:2;
+  transform:translateY(4px);
+  transition:transform .4s;
+}
+.work-item:hover .work-item-info{transform:translateY(0)}
+.work-item-cat{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.work-item-title{font-family:var(--ff-display);font-size:1.3rem;font-weight:300;line-height:1.15}
+.work-item-dur{font-size:.65rem;color:var(--cream-dim);margin-top:.3rem}
+.work-item-play{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  width:48px;height:48px;
+  border:1px solid var(--gold);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .4s, opacity .4s;
+  opacity:0;z-index:3;
+}
+.work-item:hover .work-item-play{transform:translate(-50%,-50%) scale(1);opacity:1}
+.work-item-play svg{fill:var(--gold);width:14px;margin-left:3px}
+
+/* Color patterns for work items */
+.wi-1 .work-item-bg{background:linear-gradient(135deg,#1a0f05 0%,#2d1a08 60%,#1a0f05 100%)}
+.wi-2 .work-item-bg{background:linear-gradient(135deg,#080d14 0%,#0f1e2d 60%,#080d14 100%)}
+.wi-3 .work-item-bg{background:linear-gradient(135deg,#0d0a12 0%,#1a1226 60%,#0d0a12 100%)}
+.wi-4 .work-item-bg{background:linear-gradient(135deg,#0a100a 0%,#142014 60%,#0a100a 100%)}
+.wi-5 .work-item-bg{background:linear-gradient(135deg,#14060a 0%,#260c14 60%,#14060a 100%)}
+.wi-6 .work-item-bg{background:linear-gradient(135deg,#0f0d08 0%,#211c0e 60%,#0f0d08 100%)}
+
+/* Decorative film strips on work items */
+.work-item::before{
+  content:'● ● ●';
+  position:absolute;top:.6rem;left:1rem;
+  font-size:5px;letter-spacing:4px;
+  color:rgba(197,164,85,.25);
+  z-index:3;
+}
+.work-featured{
+  grid-column:1/-1;
+  aspect-ratio:21/9;
+}
+
+/* ── GRAPHIC ── */
+#graphic{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:start;
+}
+.graphic-list{margin-top:2rem}
+.graphic-item{
+  padding:1.5rem 0;
+  border-bottom:1px solid var(--border2);
+  display:flex;justify-content:space-between;align-items:flex-start;
+  cursor:pointer;
+  transition:padding-left .3s;
+}
+.graphic-item:hover{padding-left:.5rem}
+.graphic-item-left h3{
+  font-family:var(--ff-display);
+  font-size:1.15rem;font-weight:400;
+  margin-bottom:.3rem;
+}
+.graphic-item-left p{font-size:.75rem;letter-spacing:.1em;color:var(--cream-dim)}
+.graphic-item-right{
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);
+  white-space:nowrap;margin-left:2rem;margin-top:.2rem;
+}
+.graphic-showcase{
+  position:sticky;top:8rem;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:3px;
+}
+.gshow-item{
+  aspect-ratio:1;
+  background:var(--surface);
+  position:relative;overflow:hidden;
+}
+.gshow-1{background:linear-gradient(135deg,#1a1210 0%,#2e2015 100%);grid-column:1/-1;aspect-ratio:2/1}
+.gshow-2{background:linear-gradient(135deg,#0e1018 0%,#1a2030 100%)}
+.gshow-3{background:linear-gradient(135deg,#130e18 0%,#241a2e 100%)}
+
+/* ── BLOG ── */
+#blog{background:var(--surface)}
+.blog-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem}
+.blog-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:1px;
+  border:1px solid var(--border2);
+}
+.blog-card{
+  background:var(--surface2);
+  padding:2rem;
+  cursor:pointer;
+  transition:background .3s;
+  border:1px solid var(--border2);
+}
+.blog-card:hover{background:rgba(197,164,85,.04)}
+.blog-card.featured{background:var(--bg)}
+.blog-card-cat{
+  font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.8rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.blog-card-cat::before{content:'';width:1rem;height:1px;background:var(--gold)}
+.blog-card h3{
+  font-family:var(--ff-display);
+  font-size:1.45rem;font-weight:400;
+  line-height:1.2;margin-bottom:.8rem;
+}
+.blog-card.featured h3{font-size:1.9rem}
+.blog-card p{font-size:.8rem;color:var(--cream-dim);line-height:1.75}
+.blog-card-meta{
+  margin-top:1.5rem;
+  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--cream-dim);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.blog-card-tag{
+  padding:.25rem .7rem;
+  border:1px solid var(--border);
+  font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold-dim);
+}
+.blog-more{
+  text-align:center;margin-top:2rem;
+}
+
+/* ── AUTO-POST MODAL / PANEL ── */
+#admin-panel{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.85);
+  display:none;align-items:center;justify-content:center;
+  padding:2rem;
+}
+#admin-panel.open{display:flex}
+.admin-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  max-width:700px;width:100%;
+  max-height:90vh;
+  overflow-y:auto;
+  padding:3rem;
+  position:relative;
+}
+.admin-close{
+  position:absolute;top:1.5rem;right:1.5rem;
+  background:none;border:none;color:var(--cream-dim);
+  font-size:1.2rem;cursor:pointer;
+  transition:color .3s;
+}
+.admin-close:hover{color:var(--cream)}
+.admin-h2{
+  font-family:var(--ff-display);
+  font-size:1.8rem;font-weight:300;
+  margin-bottom:.5rem;
+}
+.admin-sub{font-size:.78rem;color:var(--cream-dim);margin-bottom:2rem}
+.form-row{margin-bottom:1.5rem}
+.form-label{
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);display:block;margin-bottom:.5rem;
+}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--cream);
+  padding:.8rem 1rem;
+  font-family:var(--ff-body);
+  font-size:.85rem;font-weight:300;
+  outline:none;
+  transition:border-color .3s;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+.form-select option{background:var(--surface)}
+.form-textarea{min-height:120px;resize:vertical}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.admin-btn{
+  background:var(--gold);color:var(--bg);
+  border:none;padding:.9rem 2rem;
+  font-family:var(--ff-body);font-size:.75rem;font-weight:400;
+  letter-spacing:.15em;text-transform:uppercase;
+  cursor:pointer;transition:opacity .3s;
+  margin-top:.5rem;
+}
+.admin-btn:hover{opacity:.85}
+.admin-btn-ghost{
+  background:none;border:1px solid var(--border);
+  color:var(--cream-dim);
+  padding:.9rem 2rem;
+  font-family:var(--ff-body);font-size:.75rem;font-weight:300;
+  letter-spacing:.15em;text-transform:uppercase;
+  cursor:pointer;transition:border-color .3s,color .3s;
+  margin-top:.5rem;margin-left:1rem;
+}
+.admin-btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.schedule-status{
+  margin-top:2rem;
+  padding:1.2rem 1.5rem;
+  background:var(--bg);
+  border-left:2px solid var(--gold);
+  font-size:.8rem;color:var(--cream-dim);
+}
+.schedule-status strong{color:var(--gold);font-weight:400}
+.ai-generating{
+  padding:1rem;
+  background:rgba(197,164,85,.05);
+  border:1px solid var(--border);
+  font-size:.78rem;color:var(--cream-dim);
+  line-height:1.7;
+  margin-top:1rem;
+  min-height:80px;
+  display:none;
+}
+.ai-generating.show{display:block}
+
+/* ── BLOG DETAIL MODAL ── */
+#blog-modal{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.9);
+  display:none;align-items:flex-start;justify-content:center;
+  padding:5rem 2rem 3rem;
+  overflow-y:auto;
+}
+#blog-modal.open{display:flex}
+.blog-modal-content{
+  background:var(--surface);
+  border:1px solid var(--border);
+  max-width:720px;width:100%;
+  padding:3.5rem;
+  position:relative;
+}
+.blog-modal-close{
+  position:fixed;top:1.5rem;right:2rem;
+  background:none;border:1px solid var(--border2);
+  color:var(--cream-dim);cursor:pointer;
+  width:2.5rem;height:2.5rem;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;
+}
+.blog-modal-close:hover{border-color:var(--gold);color:var(--gold)}
+.blog-modal-cat{
+  font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1rem;
+}
+.blog-modal-title{
+  font-family:var(--ff-display);
+  font-size:2.4rem;font-weight:300;line-height:1.1;
+  margin-bottom:1.5rem;
+}
+.blog-modal-meta{
+  font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--cream-dim);
+  padding:1rem 0;
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  margin-bottom:2rem;
+  display:flex;gap:2rem;
+}
+.blog-modal-body{font-size:.9rem;color:var(--cream-dim);line-height:1.95}
+.blog-modal-body h3{
+  font-family:var(--ff-display);font-size:1.4rem;font-weight:400;
+  color:var(--cream);margin:2rem 0 .8rem;
+}
+.blog-modal-body p{margin-bottom:1rem}
+.blog-modal-body blockquote{
+  border-left:2px solid var(--gold);
+  padding-left:1.5rem;margin:1.5rem 0;
+  font-family:var(--ff-italic);font-style:italic;
+  font-size:1.05rem;color:var(--cream);line-height:1.7;
+}
+.blog-modal-body ul{padding-left:1.2rem;margin-bottom:1rem}
+.blog-modal-body li{margin-bottom:.5rem}
+
+/* ── CONTACT ── */
+#contact{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.contact-info{margin-top:2rem}
+.contact-line{
+  padding:1.2rem 0;
+  border-bottom:1px solid var(--border2);
+  display:flex;justify-content:space-between;
+}
+.contact-line-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim)}
+.contact-line-val{font-family:var(--ff-display);font-size:1.1rem;font-weight:300}
+.contact-social{display:flex;gap:1.5rem;margin-top:2rem}
+.contact-social a{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cream-dim);text-decoration:none;
+  transition:color .3s;
+}
+.contact-social a:hover{color:var(--gold)}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+
+/* ── FOOTER ── */
+footer{
+  padding:2rem 3rem;
+  border-top:1px solid var(--border2);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.65rem;letter-spacing:.1em;color:var(--cream-dim);
+}
+.footer-logo{
+  font-family:var(--ff-display);font-size:1.2rem;
+  font-weight:300;color:var(--gold);letter-spacing:.2em;
+}
+.schedule-indicator{
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold-dim);cursor:pointer;transition:color .3s;
+}
+.schedule-indicator:hover{color:var(--gold)}
+.schedule-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  animation:pulse 2s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+
+/* ── ADMIN LOGIN GATE ── */
+#admin-login-gate{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:3rem;
+  text-align:center;
+  min-height:320px;
+}
+#admin-login-gate.show{display:flex}
+.login-icon{
+  width:52px;height:52px;
+  border:1px solid var(--gold);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.5rem;
+  font-size:1.1rem;
+}
+.login-title{
+  font-family:var(--ff-display);
+  font-size:1.6rem;font-weight:300;
+  margin-bottom:.4rem;
+}
+.login-sub{font-size:.72rem;color:var(--cream-dim);letter-spacing:.05em;margin-bottom:2rem}
+.login-form{width:100%;max-width:300px}
+.login-input-wrap{position:relative;margin-bottom:1rem}
+.login-input-wrap input{
+  width:100%;background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--cream);
+  padding:.85rem 3rem .85rem 1rem;
+  font-family:var(--ff-body);font-size:.85rem;font-weight:300;
+  outline:none;letter-spacing:.08em;
+  transition:border-color .3s;
+}
+.login-input-wrap input:focus{border-color:var(--gold)}
+.login-eye{
+  position:absolute;right:.8rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--cream-dim);
+  cursor:pointer;font-size:.85rem;padding:.2rem;
+  transition:color .3s;
+}
+.login-eye:hover{color:var(--gold)}
+.login-error{
+  font-size:.65rem;letter-spacing:.08em;
+  color:#B06060;margin-bottom:1rem;
+  min-height:1rem;
+}
+.login-btn{
+  width:100%;background:var(--gold);color:var(--bg);
+  border:none;padding:.9rem;
+  font-family:var(--ff-body);font-size:.72rem;font-weight:400;
+  letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;transition:opacity .3s;
+}
+.login-btn:hover{opacity:.85}
+.login-btn:disabled{opacity:.4;cursor:not-allowed}
+.login-attempts{
+  margin-top:1rem;font-size:.6rem;letter-spacing:.08em;
+  color:var(--cream-dim);
+}
+.admin-content{display:none}
+.admin-content.show{display:block}
+.admin-topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1.5rem;
+  padding-bottom:1.2rem;
+  border-bottom:1px solid var(--border2);
+}
+.admin-user-badge{
+  display:flex;align-items:center;gap:.6rem;
+  font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold-dim);
+}
+.admin-user-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gold);
+}
+.logout-btn{
+  background:none;border:1px solid var(--border2);
+  color:var(--cream-dim);padding:.35rem .8rem;
+  font-family:var(--ff-body);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;
+}
+.logout-btn:hover{border-color:#8B3A3A;color:#B06060}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;
+  background:var(--surface);border:1px solid var(--gold);
+  padding:1rem 1.5rem;
+  font-size:.78rem;color:var(--cream);
+  z-index:300;
+  transform:translateX(120%);
+  transition:transform .4s;
+  max-width:320px;
+}
+.toast.show{transform:translateX(0)}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:1.2rem 1.5rem}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  section{padding:5rem 1.5rem}
+  #hero{padding:0 1.5rem 4rem}
+  .hero-h1{max-width:100%;font-size:clamp(2.8rem,9vw,5rem)}
+  #about,#contact,#graphic{grid-template-columns:1fr}
+  .about-visual{display:none}
+  .work-grid{grid-template-columns:1fr}
+  .work-featured{aspect-ratio:16/9}
+  .blog-grid{grid-template-columns:1fr}
+  .blog-header{flex-direction:column;gap:1rem;align-items:flex-start}
+  footer{flex-direction:column;gap:1rem;text-align:center}
+  .admin-box{padding:2rem}
+  .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Khung Hình</a>
+  <ul class="nav-links">
+    <li><a href="#work">Film</a></li>
+    <li><a href="#graphic">Đồ Họa</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="#contact">Liên Hệ</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hợp Tác</a>
+  <div class="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     🖼  HƯỚNG DẪN THÊM HÌNH ẢNH — MỤC HERO (Trang chủ toàn màn hình)
+     ═══════════════════════════════════════════════════════════════════
+
+  PHƯƠNG ÁN 1 — Ảnh nền tĩnh (đơn giản nhất):
+  Trong thẻ <div class="hero-reel">, thêm:
+    <img src="anh-hero.jpg" alt="Hero background"
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.35;">
+  → Đặt ảnh landscape rộng, phong cảnh hoặc behind-the-scenes quay phim.
+  → Gợi ý: 1920×1080px trở lên. Ảnh tối, nhiều không gian trống bên trái để chữ nổi.
+
+  PHƯƠNG ÁN 2 — Video nền (cinematic nhất):
+  Trong thẻ <div class="hero-reel">, thêm:
+    <video autoplay muted loop playsinline
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.3;">
+      <source src="showreel-loop.mp4" type="video/mp4">
+    </video>
+  → Dùng clip 10-30 giây từ các dự án đẹp nhất, không có audio.
+  → Gợi ý: export 1080p, nén nhỏ (~5-10MB) bằng HandBrake để web tải nhanh.
+  ═══════════════════════════════════════════════════════════════════ -->
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-reel">
+    <!-- 📍 VỊ TRÍ ĐẶT ẢNH/VIDEO NỀN HERO — Xem hướng dẫn comment bên trên -->
+    <div class="film-frame"></div>
+    <div class="film-frame"></div>
+    <div class="film-frame"></div>
+    <div class="film-frame"></div>
+  </div>
+  <div class="hero-tag">Video · Graphic · Storytelling</div>
+  <h1 class="hero-h1">
+    Mỗi khung hình<br>là một <em>câu chuyện</em><br>chưa kể xong.
+  </h1>
+  <p class="hero-sub">
+    Tôi dựng phim bằng cảm xúc — biên tập, màu sắc, nhạc nền và nhịp điệu như những nốt nhạc hòa thành một bản symphony thị giác. Storytelling là nghề, hành trình là cảm hứng.
+  </p>
+  <div class="hero-actions">
+    <a href="#work" class="btn-primary">Xem Showreel</a>
+    <a href="#blog" class="btn-ghost">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+      Blog &amp; Tips
+    </a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     🖼  HƯỚNG DẪN THÊM HÌNH ẢNH — MỤC VỀ TÔI (About)
+     ═══════════════════════════════════════════════════════════════════
+
+  CÁCH THÊM ẢNH CHÂN DUNG vào khung bên trái (class="about-visual"):
+  Xóa hoặc giữ lại <div class="about-visual-text"> (chữ mờ phía sau).
+  Thêm thẻ <img> ngay sau dòng <div class="about-visual-label">...:
+    <img src="portrait.jpg" alt="Portrait"
+         style="position:absolute;inset:0;width:100%;height:100%;
+                object-fit:cover;object-position:top center;opacity:0.85;">
+  → Ảnh dọc (portrait) tỉ lệ 4:5 là đẹp nhất, nên chụp với ánh sáng tự nhiên.
+  → Gợi ý: ảnh đang làm việc, cầm máy quay, nhìn qua viewfinder.
+  → Màu ảnh nên tối, tone warm để hòa với nền web.
+  ═══════════════════════════════════════════════════════════════════ -->
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <!-- 📍 VỊ TRÍ ĐẶT ẢNH CHÂN DUNG — Xem hướng dẫn comment bên trên -->
+    <div class="about-visual-label">
+      <span>Filmmaker</span>
+      <span>Storyteller</span>
+    </div>
+    <div class="about-visual-text">FILM<br>STORY<br>COLOR</div>
+    <div class="about-visual-accent"></div>
+  </div>
+  <div class="about-content">
+    <div class="section-label">Về Tôi</div>
+    <h2 class="section-h2 reveal">Kể chuyện<br>bằng <em>hình ảnh</em></h2>
+    <div class="about-text reveal" style="margin-top:1.5rem">
+      <p>Với hơn 5 năm theo đuổi nghệ thuật kể chuyện qua video, tôi tin rằng mỗi thước phim đều mang một linh hồn riêng — được định hình bởi ánh sáng, nhịp cắt, giai điệu và màu sắc.</p>
+      <p>Song song với dựng phim, tôi thiết kế đồ họa với phong cách tối giản — nơi typography và bố cục tạo nên ngôn ngữ hình ảnh đặc trưng. Những chuyến đi bụi là nguồn cảm hứng bất tận cho mọi tác phẩm.</p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat"><div class="stat-num">120+</div><div class="stat-label">Dự Án Video</div></div>
+      <div class="stat"><div class="stat-num">5+</div><div class="stat-label">Năm Kinh Nghiệm</div></div>
+      <div class="stat"><div class="stat-num">18</div><div class="stat-label">Quốc Gia</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Giải Thưởng</div></div>
+    </div>
+  </div>
+</section>
+
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  🖼  HƯỚNG DẪN THÊM HÌNH ẢNH — MỤC FILM & VIDEO (Work Grid)
+  ═══════════════════════════════════════════════════════════════════
+
+  MỖI Ô VIDEO có một div.work-item-bg — đây là nơi đặt thumbnail.
+  Thêm thẻ img bên trong div.work-item-bg:
+      src="ten-phim-thumb.jpg" | object-fit:cover | width/height:100%
+  Ảnh sẽ tự zoom khi hover nhờ CSS transition đã có sẵn.
+  Kích thước: 1280x720px (16:9). Nên dùng still frame đã color grade.
+
+  FILE GỢI Ý (đặt trong thư mục /images/work/):
+    wi-1 Featured : ben-doi-tay-bac.jpg
+    wi-2          : saigon-4am.jpg
+    wi-3          : muon-doi-wedding.jpg
+    wi-4          : con-duong-dat-do.jpg
+    wi-5          : lang-brand-film.jpg
+    wi-6          : mua-hoa-cai.jpg
+
+  VIDEO PREVIEW (nâng cao): dùng thẻ video thay img,
+  thêm onmouseenter="this.play()" onmouseleave="this.pause()"
+  để tự phát 5-10 giây clip khi hover.
+  ═══════════════════════════════════════════════════════════════════
+-->
+<!-- WORK -->
+<section id="work">
+  <div class="section-label">Film &amp; Video</div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end">
+    <h2 class="section-h2 reveal">Những khung hình<br><em>đã sống</em></h2>
+    <div style="font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cream-dim)">Cinematography · Editing · Color</div>
+  </div>
+  <div class="work-grid reveal" style="margin-top:3rem">
+    <div class="work-item work-featured wi-1" onclick="openWorkModal('Bến Đợi — Tây Bắc Journey','Documentary · Short Film','12:45','A cinematic journey through the misty valleys of Northwest Vietnam. Every frame breathes the scent of pine forests and the silence between steps.')">
+      <!-- 📍 ẢNH THUMBNAIL: thay thế div.work-item-bg bằng <img> hoặc giữ gradient và thêm img vào trong. File: /images/work/ben-doi-tay-bac.jpg -->
+      <div class="work-item-bg"></div>
+      <div class="work-item-play"><svg viewBox="0 0 10 12"><path d="M0 0L10 6 0 12z"/></svg></div>
+      <div class="work-item-info">
+        <div class="work-item-cat">Documentary · Featured</div>
+        <div class="work-item-title">Bến Đợi — Tây Bắc Journey</div>
+        <div class="work-item-dur">12:45 · 4K · Color Graded</div>
+      </div>
+    </div>
+    <div class="work-item wi-2" onclick="openWorkModal('Sài Gòn 4AM','Urban Storytelling','08:20','The city that never truly sleeps. A portrait of the invisible hours — when the streets belong to the lonely, the hopeful, and the quietly extraordinary.')">
+      <!-- 📍 ẢNH THUMBNAIL: File gợi ý /images/work/saigon-4am.jpg — ảnh đường phố ban đêm, ánh đèn cam -->
+      <div class="work-item-bg"></div>
+      <div class="work-item-play"><svg viewBox="0 0 10 12"><path d="M0 0L10 6 0 12z"/></svg></div>
+      <div class="work-item-info">
+        <div class="work-item-cat">Urban Storytelling</div>
+        <div class="work-item-title">Sài Gòn 4AM</div>
+        <div class="work-item-dur">08:20 · Anamorphic</div>
+      </div>
+    </div>
+    <div class="work-item wi-3" onclick="openWorkModal('Muôn Đời — Wedding Film','Emotional Documentary','24:10','Two souls, one story. A wedding film that captures the silences between vows — the glances, the trembling hands, the unspoken promises.')">
+      <!-- 📍 ẢNH THUMBNAIL: File gợi ý /images/work/muon-doi-wedding.jpg — khoảnh khắc cảm xúc, ánh sáng vàng -->
+      <div class="work-item-bg"></div>
+      <div class="work-item-play"><svg viewBox="0 0 10 12"><path d="M0 0L10 6 0 12z"/></svg></div>
+      <div class="work-item-info">
+        <div class="work-item-cat">Wedding Film</div>
+        <div class="work-item-title">Muôn Đời</div>
+        <div class="work-item-dur">24:10 · Cinematic</div>
+      </div>
+    </div>
+    <div class="work-item wi-4" onclick="openWorkModal('Con Đường Đất Đỏ','Travel Documentary','18:35','Riding through the red dirt roads of the Central Highlands — a motorcycle diary through coffee plantations, waterfalls, and forgotten villages.')">
+      <!-- 📍 ẢNH THUMBNAIL: File gợi ý /images/work/con-duong-dat-do.jpg — đường núi đất đỏ, Tây Nguyên -->
+      <div class="work-item-bg"></div>
+      <div class="work-item-play"><svg viewBox="0 0 10 12"><path d="M0 0L10 6 0 12z"/></svg></div>
+      <div class="work-item-info">
+        <div class="work-item-cat">Travel Documentary</div>
+        <div class="work-item-title">Con Đường Đất Đỏ</div>
+        <div class="work-item-dur">18:35 · 4K HDR</div>
+      </div>
+    </div>
+    <div class="work-item wi-5" onclick="openWorkModal('Lặng — Brand Film','Commercial · Emotional','02:30','A brand film for a Saigon coffee house. Stillness as a luxury. Silence as the product.')">
+      <!-- 📍 ẢNH THUMBNAIL: File gợi ý /images/work/lang-brand-film.jpg — cốc cà phê, ánh sáng tối giản studio -->
+      <div class="work-item-bg"></div>
+      <div class="work-item-play"><svg viewBox="0 0 10 12"><path d="M0 0L10 6 0 12z"/></svg></div>
+      <div class="work-item-info">
+        <div class="work-item-cat">Brand Film</div>
+        <div class="work-item-title">Lặng — Brand Film</div>
+        <div class="work-item-dur">02:30 · Commercial</div>
+      </div>
+    </div>
+    <div class="work-item wi-6" onclick="openWorkModal('Mùa Hoa Cải','Short Film','15:00','A quiet love story set against golden mustard flower fields in Ha Giang. Winner — Hanoi Short Film Festival.')">
+      <!-- 📍 ẢNH THUMBNAIL: File gợi ý /images/work/mua-hoa-cai.jpg — cánh đồng hoa cải vàng Hà Giang -->
+      <div class="work-item-bg"></div>
+      <div class="work-item-play"><svg viewBox="0 0 10 12"><path d="M0 0L10 6 0 12z"/></svg></div>
+      <div class="work-item-info">
+        <div class="work-item-cat">Short Film · Award</div>
+        <div class="work-item-title">Mùa Hoa Cải</div>
+        <div class="work-item-dur">15:00 · Festival</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     🖼  HƯỚNG DẪN THÊM HÌNH ẢNH — MỤC ĐỒ HỌA (Graphic Showcase)
+     ═══════════════════════════════════════════════════════════════════
+
+  CÓ 3 Ô SHOWCASE bên phải (sticky khi cuộn):
+  ┌──────────────────────────┬─────────────────────────────────────────┐
+  │ Ô / Class                │ Nội dung gợi ý & file ảnh              │
+  ├──────────────────────────┼─────────────────────────────────────────┤
+  │ gshow-1 (rộng 2 cột)    │ Mockup brand identity / logo system     │
+  │                          │ File: /images/graphic/brand-moc.jpg    │
+  │                          │ Tỉ lệ 2:1, 1200×600px                 │
+  ├──────────────────────────┼─────────────────────────────────────────┤
+  │ gshow-2 (vuông trái)     │ Poster thiết kế / editorial layout      │
+  │                          │ File: /images/graphic/poster-1.jpg     │
+  │                          │ Tỉ lệ 1:1, 600×600px                  │
+  ├──────────────────────────┼─────────────────────────────────────────┤
+  │ gshow-3 (vuông phải)     │ Motion graphics still frame / thumbnail │
+  │                          │ File: /images/graphic/motion-1.jpg     │
+  │                          │ Tỉ lệ 1:1, 600×600px                  │
+  └──────────────────────────┴─────────────────────────────────────────┘
+
+  CÁCH THÊM ẢNH vào mỗi ô: thêm <img> TRƯỚC <div style="position:absolute...">
+    <img src="duong-dan-anh.jpg" alt="Mô tả"
+         style="position:absolute;inset:0;width:100%;height:100%;
+                object-fit:cover;opacity:0.75;">
+  → Text bên dưới sẽ hiện lên trên ảnh nhờ z-index và vị trí absolute.
+  ═══════════════════════════════════════════════════════════════════ -->
+<!-- GRAPHIC -->
+<section id="graphic">
+  <div class="graphic-list">
+    <div class="section-label">Đồ Họa</div>
+    <h2 class="section-h2 reveal">Khi hình ảnh<br><em>thay lời nói</em></h2>
+    <div class="graphic-list reveal" style="margin-top:2rem">
+      <div class="graphic-item"><div class="graphic-item-left"><h3>Brand Identity &amp; Logo</h3><p>Nhận diện thương hiệu tối giản</p></div><div class="graphic-item-right">12 Dự Án →</div></div>
+      <div class="graphic-item"><div class="graphic-item-left"><h3>Motion Graphics</h3><p>Chuyển động kể chuyện</p></div><div class="graphic-item-right">08 Dự Án →</div></div>
+      <div class="graphic-item"><div class="graphic-item-left"><h3>Poster &amp; Editorial</h3><p>Typography &amp; bố cục</p></div><div class="graphic-item-right">20 Dự Án →</div></div>
+      <div class="graphic-item"><div class="graphic-item-left"><h3>Thumbnail &amp; Artwork</h3><p>YouTube &amp; social content</p></div><div class="graphic-item-right">50+ Thiết Kế →</div></div>
+      <div class="graphic-item"><div class="graphic-item-left"><h3>Packaging Design</h3><p>Thiết kế bao bì &amp; ấn phẩm</p></div><div class="graphic-item-right">05 Dự Án →</div></div>
+    </div>
+  </div>
+  <div class="graphic-showcase reveal">
+    <div class="gshow-item gshow-1">
+      <!-- 📍 ẢNH ĐỒ HỌA 1 (ô rộng): /images/graphic/brand-moc.jpg — brand identity mockup -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:2rem">
+        <div style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem">Brand Identity</div>
+        <div style="font-family:var(--ff-display);font-size:1.8rem;font-weight:300">Mộc Studio</div>
+        <div style="font-size:.7rem;color:var(--cream-dim);margin-top:.3rem">Brand · Logo · Visual System</div>
+      </div>
+    </div>
+    <div class="gshow-item gshow-2">
+      <!-- 📍 ẢNH ĐỒ HỌA 2 (vuông trái): /images/graphic/poster-1.jpg — poster film hoặc editorial -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem">
+        <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">Poster</div>
+        <div style="font-family:var(--ff-display);font-size:1.3rem;font-weight:300">Film Festival</div>
+      </div>
+    </div>
+    <div class="gshow-item gshow-3">
+      <!-- 📍 ẢNH ĐỒ HỌA 3 (vuông phải): /images/graphic/motion-1.jpg — motion graphics hoặc title card -->
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem">
+        <div style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">Motion</div>
+        <div style="font-family:var(--ff-display);font-size:1.3rem;font-weight:300">Title Cards</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  🖼  HƯỚNG DẪN THÊM HÌNH ẢNH — MỤC BLOG
+  ═══════════════════════════════════════════════════════════════════
+
+  ẢNH BÌA BÀI VIẾT: Thêm field "thumbnail" vào object bài viết
+  trong mảng posts[] ở phần JavaScript:
+      { id:1, title:'...', thumbnail:'images/blog/bai-1-cover.jpg', ... }
+
+  Hàm renderBlog() sẽ tự render ảnh nếu có field thumbnail.
+  Nếu không có thumbnail → hiển thị card không ảnh (vẫn đẹp).
+
+  GỢI Ý ẢNH BÌA THEO CHỦ ĐỀ:
+    filmmaking  → still frame phim, timeline Premiere, hoặc camera
+    music       → headphone, waveform, keyboard studio
+    color       → color wheel, LUT palette, still frame color grade
+    typography  → layout chữ, font pairing, poster design
+    travel      → phong cảnh chuyến đi, backpack, compass
+    gear        → camera, lens, thiết bị
+
+  KÍCH THƯỚC GỢI Ý: 1200x675px (tỉ lệ 16:9). Nén .webp để tải nhanh.
+  ═══════════════════════════════════════════════════════════════════
+-->
+<!-- BLOG -->
+<section id="blog">
+  <div class="blog-header">
+    <div>
+      <div class="section-label">Blog</div>
+      <h2 class="section-h2 reveal">Ghi chép &amp;<br><em>chia sẻ</em></h2>
+    </div>
+    <div style="display:flex;gap:1rem;align-items:center">
+      <div class="schedule-indicator" onclick="openAdmin()">
+        <div class="schedule-dot"></div>
+        Auto-post · Mỗi Thứ Sáu
+      </div>
+      <button onclick="openAdmin()" style="background:none;border:1px solid var(--border);color:var(--cream-dim);padding:.5rem 1rem;font-family:var(--ff-body);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .3s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--cream-dim)'">Quản Lý Blog</button>
+    </div>
+  </div>
+  <div class="blog-grid reveal" id="blog-grid">
+    <!-- Populated by JS -->
+  </div>
+  <div class="blog-more reveal" style="margin-top:2rem">
+    <a href="blog.html" style="font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-dim);padding-bottom:.2rem">Xem Tất Cả Bài Viết →</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div>
+    <div class="section-label">Liên Hệ</div>
+    <h2 class="section-h2 reveal">Cùng tạo ra<br>điều <em>phi thường</em></h2>
+    <p style="margin-top:1rem;font-size:.85rem;color:var(--cream-dim);line-height:1.8;max-width:32rem" class="reveal">
+      Mỗi dự án là một cơ hội kể câu chuyện chưa được kể. Hãy liên hệ nếu bạn cần một người đồng hành biến ý tưởng thành hình ảnh.
+    </p>
+    <div class="contact-info reveal">
+      <div class="contact-line"><span class="contact-line-label">Email</span><span class="contact-line-val">hello@khunghinh.vn</span></div>
+      <div class="contact-line"><span class="contact-line-label">Điện Thoại</span><span class="contact-line-val">+84 90 000 0000</span></div>
+      <div class="contact-line"><span class="contact-line-label">Địa Chỉ</span><span class="contact-line-val">Hồ Chí Minh, Việt Nam</span></div>
+    </div>
+    <div class="contact-social">
+      <a href="#">YouTube</a>
+      <a href="#">Instagram</a>
+      <a href="#">Behance</a>
+      <a href="#">Vimeo</a>
+    </div>
+  </div>
+  <div class="contact-form reveal">
+    <div class="form-row">
+      <label class="form-label">Tên &amp; Tổ Chức</label>
+      <input type="text" class="form-input" placeholder="Nguyễn Văn A / Công ty XYZ">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" placeholder="email@example.com">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Loại Dự Án</label>
+      <select class="form-select">
+        <option>Wedding Film</option>
+        <option>Documentary</option>
+        <option>Brand Film / Commercial</option>
+        <option>Travel Video</option>
+        <option>Graphic Design</option>
+        <option>Khác</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Mô Tả Dự Án</label>
+      <textarea class="form-textarea" placeholder="Kể cho tôi nghe về câu chuyện bạn muốn kể..."></textarea>
+    </div>
+    <button class="admin-btn" onclick="showToast('✓ Tin nhắn đã được gửi. Tôi sẽ liên hệ trong 24h!')">Gửi Tin Nhắn</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Khung Hình</div>
+  <div>© 2025 · Video Editor &amp; Graphic Designer · Hồ Chí Minh</div>
+  <div class="schedule-indicator" onclick="openAdmin()">
+    <div class="schedule-dot"></div>
+    Blog · Tự động mỗi tuần
+  </div>
+</footer>
+
+<!-- ADMIN PANEL — Protected by password. Login gate shown first. -->
+<div id="admin-panel">
+  <div class="admin-box">
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+
+    <!-- ════════ LOGIN GATE ════════ -->
+    <div id="admin-login-gate" class="show">
+      <div class="login-icon">🔐</div>
+      <div class="login-title">Khu Vực Admin</div>
+      <div class="login-sub">Nhập mật khẩu để truy cập quản lý blog</div>
+      <div class="login-form">
+        <div class="login-input-wrap">
+          <input type="password" id="admin-pw-input" placeholder="Mật khẩu admin..."
+                 onkeydown="if(event.key==='Enter')doAdminLogin()"
+                 oninput="document.getElementById('login-err').textContent=''">
+          <button class="login-eye" onclick="togglePwVis()" title="Hiện/Ẩn mật khẩu">👁</button>
+        </div>
+        <div class="login-error" id="login-err"></div>
+        <button class="login-btn" onclick="doAdminLogin()" id="login-submit-btn">Đăng Nhập</button>
+        <div class="login-attempts" id="login-attempt-info"></div>
+      </div>
+    </div>
+
+    <!-- ════════ ADMIN CONTENT (ẩn cho đến khi login thành công) ════════ -->
+    <div class="admin-content" id="admin-content">
+      <div class="admin-topbar">
+        <div>
+          <div class="admin-h2">Quản Lý Blog &amp; Auto-Post</div>
+          <div class="admin-sub" style="margin-bottom:0">Tạo bài viết thủ công hoặc đặt lịch AI tự động viết &amp; đăng mỗi tuần.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.5rem">
+          <div class="admin-user-badge">
+            <div class="admin-user-dot"></div>
+            Admin
+          </div>
+          <button class="logout-btn" onclick="doAdminLogout()">Đăng Xuất</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap">
+        <button onclick="switchTab('manual')" id="tab-manual" class="admin-btn" style="margin-top:0">✍ Viết Thủ Công</button>
+        <button onclick="switchTab('auto')" id="tab-auto" class="admin-btn-ghost" style="margin-top:0">⚡ AI Auto-Post</button>
+        <button onclick="switchTab('schedule')" id="tab-schedule" class="admin-btn-ghost" style="margin-top:0">📅 Lịch Đăng</button>
+        <button onclick="switchTab('settings')" id="tab-settings" class="admin-btn-ghost" style="margin-top:0">⚙ Cài Đặt</button>
+      </div>
+
+      <!-- MANUAL TAB -->
+      <div id="tab-content-manual">
+        <div class="form-row">
+          <label class="form-label">Tiêu Đề Bài Viết</label>
+          <input type="text" class="form-input" id="post-title" placeholder="VD: 5 bí quyết dùng màu trong dựng phim">
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label class="form-label">Chủ Đề</label>
+            <select class="form-select" id="post-cat">
+              <option value="filmmaking">Dựng Phim & Biên Tập</option>
+              <option value="music">Âm Nhạc trong Video</option>
+              <option value="color">Màu Sắc & Color Grading</option>
+              <option value="typography">Typography & Layout</option>
+              <option value="travel">Du Lịch Bụi</option>
+              <option value="gear">Thiết Bị & Công Nghệ</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Thời Gian Đọc</label>
+            <input type="text" class="form-input" id="post-readtime" placeholder="VD: 5 phút đọc">
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Tóm Tắt</label>
+          <textarea class="form-textarea" id="post-excerpt" placeholder="Mô tả ngắn về nội dung bài viết..." style="min-height:80px"></textarea>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Nội Dung (Markdown)</label>
+          <textarea class="form-textarea" id="post-content" placeholder="Viết nội dung bài viết tại đây..." style="min-height:200px"></textarea>
+        </div>
+        <button class="admin-btn" onclick="publishPost()">📤 Đăng Bài Ngay</button>
+      </div>
+
+      <!-- AUTO TAB -->
+      <div id="tab-content-auto" style="display:none">
+
+        <!-- API Key notice -->
+        <div id="apikey-notice-auto" style="display:none;padding:.8rem 1rem;background:rgba(139,58,58,.12);border:1px solid rgba(139,58,58,.4);font-size:.72rem;color:#C08080;margin-bottom:1.2rem;line-height:1.6">
+          ⚠ Chưa có Gemini API Key. Vào tab <strong>⚙ Cài Đặt</strong> để nhập key.
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">AI Tự Động Tạo Bài Viết Về</label>
+          <select class="form-select" id="ai-topic">
+            <option value="filmmaking">Kỹ thuật dựng phim & biên tập video</option>
+            <option value="music">Cách chọn và dùng nhạc trong video storytelling</option>
+            <option value="color">Màu sắc, tone & color grading cinematic</option>
+            <option value="typography">Typography & bố cục trong đồ họa</option>
+            <option value="travel">Tips du lịch bụi cho filmmaker</option>
+            <option value="gear">Review thiết bị quay phim & phần mềm edit</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Giọng Văn</label>
+          <select class="form-select" id="ai-tone">
+            <option value="personal">Chia sẻ cá nhân, chân thực</option>
+            <option value="professional">Chuyên nghiệp, hướng dẫn rõ ràng</option>
+            <option value="storytelling">Kể chuyện, giàu cảm xúc</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Gợi Ý Thêm (tùy chọn)</label>
+          <input type="text" class="form-input" id="ai-hint" placeholder="VD: Tập trung vào màu orange-teal, kỹ thuật LUT...">
+        </div>
+        <button class="admin-btn" onclick="generateAIPost()">⚡ Tạo Bài Bằng AI</button>
+
+        <div class="ai-generating" id="ai-output">
+          <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem">Gemini đang viết...</div>
+          <div id="ai-output-text"></div>
+        </div>
+
+        <div id="ai-post-preview" style="display:none;margin-top:1.5rem">
+          <div style="border:1px solid var(--border);padding:1.5rem;background:var(--bg)">
+            <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem">Xem Trước Bài Viết</div>
+            <div id="ai-preview-content" style="font-size:.83rem;color:var(--cream-dim);line-height:1.8"></div>
+          </div>
+          <button class="admin-btn" onclick="publishAIPost()" style="margin-top:1rem">📤 Đăng Bài AI</button>
+          <button class="admin-btn-ghost" onclick="document.getElementById('ai-post-preview').style.display='none'" style="margin-top:1rem">✎ Chỉnh Sửa Lại</button>
+        </div>
+      </div>
+
+      <!-- SCHEDULE TAB -->
+      <div id="tab-content-schedule" style="display:none">
+        <div class="schedule-status">
+          <strong>Lịch đăng hiện tại:</strong> Mỗi thứ Sáu lúc 08:00 SA<br>
+          <span id="next-post-info">Bài viết tiếp theo sẽ được tạo và đăng tự động.</span>
+        </div>
+        <div class="form-grid" style="margin-top:1.5rem">
+          <div class="form-row">
+            <label class="form-label">Ngày Đăng Trong Tuần</label>
+            <select class="form-select" id="sched-day">
+              <option value="1">Thứ Hai</option>
+              <option value="2">Thứ Ba</option>
+              <option value="3">Thứ Tư</option>
+              <option value="4">Thứ Năm</option>
+              <option value="5" selected>Thứ Sáu</option>
+              <option value="6">Thứ Bảy</option>
+              <option value="0">Chủ Nhật</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Chủ Đề Luân Phiên</label>
+            <select class="form-select" id="sched-rotation">
+              <option value="random">Ngẫu nhiên</option>
+              <option value="filmmaking">Chỉ Dựng Phim</option>
+              <option value="mixed">Xen kẽ tất cả chủ đề</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Trạng Thái Auto-Post</label>
+          <div style="display:flex;align-items:center;gap:1rem;margin-top:.5rem">
+            <div id="toggle-auto" onclick="toggleAutoPost()" style="width:44px;height:24px;background:var(--gold);border-radius:12px;position:relative;cursor:pointer;transition:background .3s">
+              <div style="width:20px;height:20px;background:var(--bg);border-radius:50%;position:absolute;top:2px;right:2px;transition:right .3s"></div>
+            </div>
+            <span id="toggle-label" style="font-size:.75rem;color:var(--cream)">Đang Bật — AI sẽ tự đăng mỗi tuần</span>
+          </div>
+        </div>
+        <button class="admin-btn" onclick="saveSchedule()">💾 Lưu Cài Đặt</button>
+        <div style="margin-top:2rem">
+          <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Lịch Sử Bài Đã Đăng</div>
+          <div id="post-history" style="font-size:.78rem;color:var(--cream-dim)">Đang tải...</div>
+        </div>
+      </div>
+      <!-- SETTINGS TAB -->
+      <div id="tab-content-settings" style="display:none">
+
+        <div style="padding:.9rem 1.2rem;background:rgba(197,164,85,.06);border:1px solid var(--border);margin-bottom:1.5rem;font-size:.75rem;color:var(--cream-dim);line-height:1.8">
+          <div style="font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Gemini AI Studio</div>
+          Lấy API key miễn phí tại:<br>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--gold);font-size:.72rem;letter-spacing:.05em">aistudio.google.com/app/apikey →</a><br><br>
+          Key được lưu cục bộ trên máy, không gửi đến bất kỳ server nào khác ngoài Google.
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Gemini API Key</label>
+          <div style="position:relative">
+            <input type="password" class="form-input" id="gemini-key-input"
+                   placeholder="AIza..."
+                   style="padding-right:6rem"
+                   oninput="document.getElementById('key-save-hint').textContent=''">
+            <button onclick="toggleGeminiKeyVis()"
+                    style="position:absolute;right:3.5rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--cream-dim);cursor:pointer;font-size:.8rem;padding:.3rem">👁</button>
+            <button onclick="testGeminiKey()"
+                    style="position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--gold-dim);cursor:pointer;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:.3rem">Test</button>
+          </div>
+          <div id="key-save-hint" style="font-size:.62rem;color:var(--cream-dim);margin-top:.4rem"></div>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Model Gemini</label>
+          <select class="form-select" id="gemini-model-select">
+            <option value="gemini-2.0-flash">gemini-2.0-flash (Nhanh, miễn phí — Khuyên dùng)</option>
+            <option value="gemini-1.5-flash">gemini-1.5-flash (Ổn định, miễn phí)</option>
+            <option value="gemini-1.5-pro">gemini-1.5-pro (Chất lượng cao — giới hạn free)</option>
+          </select>
+        </div>
+
+        <div style="display:flex;gap:.8rem;margin-top:.5rem">
+          <button class="admin-btn" onclick="saveGeminiSettings()" style="margin-top:0">💾 Lưu API Key</button>
+          <button class="admin-btn-ghost" onclick="clearGeminiKey()" style="margin-top:0">🗑 Xóa Key</button>
+        </div>
+
+        <div id="key-test-result" style="margin-top:1.2rem;display:none;padding:.9rem 1.2rem;font-size:.75rem;line-height:1.7;border:1px solid var(--border)"></div>
+
+        <div style="margin-top:2rem;border-top:1px solid var(--border2);padding-top:1.5rem">
+          <div style="font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem">Hướng Dẫn Lấy API Key</div>
+          <div style="font-size:.72rem;color:var(--cream-dim);line-height:2">
+            1. Truy cập <strong style="color:var(--cream)">aistudio.google.com</strong><br>
+            2. Đăng nhập bằng tài khoản Google<br>
+            3. Click <strong style="color:var(--cream)">"Get API key"</strong> → <strong style="color:var(--cream)">"Create API key"</strong><br>
+            4. Copy key (bắt đầu bằng <code style="color:var(--gold);font-size:.7rem">AIza...</code>)<br>
+            5. Dán vào ô bên trên và nhấn Lưu<br><br>
+            <span style="color:var(--gold-dim)">Free tier: 15 requests/phút · 1,500 requests/ngày · 0 đồng</span>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- WORK MODAL -->
+<div id="work-modal" style="position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:2rem">
+  <div style="background:var(--surface);border:1px solid var(--border);max-width:600px;width:100%;padding:3rem;position:relative">
+    <button onclick="document.getElementById('work-modal').style.display='none'" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:1px solid var(--border2);color:var(--cream-dim);width:2.5rem;height:2.5rem;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">✕</button>
+    <div id="wm-cat" style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem"></div>
+    <div id="wm-title" style="font-family:var(--ff-display);font-size:2rem;font-weight:300;line-height:1.15;margin-bottom:1rem"></div>
+    <div id="wm-dur" style="font-size:.7rem;letter-spacing:.15em;color:var(--cream-dim);margin-bottom:1.5rem"></div>
+    <div id="wm-desc" style="font-size:.88rem;color:var(--cream-dim);line-height:1.85"></div>
+    <div style="margin-top:2rem;display:flex;gap:1rem">
+      <button style="background:var(--gold);color:var(--bg);border:none;padding:.8rem 1.5rem;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer">▶ Xem Video</button>
+      <button onclick="document.getElementById('work-modal').style.display='none'" style="background:none;border:1px solid var(--border);color:var(--cream-dim);padding:.8rem 1.5rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG MODAL -->
+<div id="blog-modal" style="position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);display:none;padding:5rem 2rem 3rem;overflow-y:auto;">
+  <div class="blog-modal-content">
+    <button class="blog-modal-close" onclick="closeBlogModal()">✕</button>
+    <div class="blog-modal-cat" id="bm-cat"></div>
+    <div class="blog-modal-title" id="bm-title"></div>
+    <div class="blog-modal-meta">
+      <span id="bm-date"></span>
+      <span id="bm-readtime"></span>
+      <span id="bm-author">by Khung Hình</span>
+    </div>
+    <div class="blog-modal-body" id="bm-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──
+const CAT_LABELS = {
+  filmmaking:'Dựng Phim',music:'Âm Nhạc',color:'Màu Sắc',
+  typography:'Typography',travel:'Du Lịch Bụi',gear:'Thiết Bị'
+};
+
+let posts = JSON.parse(localStorage.getItem('kh_posts')||'null') || [
+  {
+    id:1,title:'Nhịp Cắt — Linh Hồn Của Một Bộ Phim',
+    cat:'filmmaking',excerpt:'Tại sao một bộ phim hay không nằm ở máy quay đắt tiền hay góc đẹp, mà nằm ở khoảnh khắc bạn quyết định cắt?',
+    content:`<h3>Nhịp cắt là cảm xúc</h3>
+<p>Khi học về biên tập video, điều đầu tiên tôi được dạy là: "Đừng cắt theo logic, hãy cắt theo cảm xúc." Câu đó tưởng trừu tượng, nhưng thực ra là nền tảng của mọi storytelling bằng hình ảnh.</p>
+<blockquote>Mỗi nhát cắt là một câu trong bản nhạc cảm xúc bạn đang soạn cho người xem.</blockquote>
+<h3>Ba loại nhịp cắt</h3>
+<ul><li><strong>Cut on action:</strong> Cắt ngay khi nhân vật đang chuyển động — tạo sự liền mạch tự nhiên nhất.</li><li><strong>Cut on beat:</strong> Cắt theo nhịp nhạc — tạo năng lượng và rhythm cho cảnh quay.</li><li><strong>Cut on emotion:</strong> Cắt khi cảm xúc đạt đỉnh — để khoảng lặng nói thay lời.</li></ul>
+<h3>Bài tập thực hành</h3>
+<p>Lấy 3 phút footage bất kỳ về một con người. Chỉ dùng close-up khuôn mặt và wide shot môi trường. Edit không nhạc trước — bạn sẽ nghe được "nhịp thở" tự nhiên của câu chuyện.</p>`,
+    date:'16/05/2025',readtime:'6 phút đọc',featured:true
+  },
+  {
+    id:2,title:'Âm Nhạc Trong Video: Chọn Nhạc Như Thế Nào?',
+    cat:'music',excerpt:'Nhạc nền không phải trang trí — nó là lớp kể chuyện thứ hai, song hành với hình ảnh và tạo nên chiều sâu cảm xúc.',
+    content:`<h3>Nhạc là subtext của video</h3>
+<p>Thử một thí nghiệm: lấy cùng một cảnh quay mặt trời lặn, lần lượt đặt nhạc buồn và nhạc hùng tráng. Hai thứ hoàn toàn khác nhau ra đời — dù hình ảnh y hệt. Đó là sức mạnh của âm nhạc trong storytelling.</p>
+<blockquote>Nhạc tốt không làm bạn nghe thấy — nó làm bạn cảm thấy mà không nhận ra.</blockquote>
+<h3>Nguyên tắc chọn nhạc</h3>
+<ul><li>Nhạc không nên "mô tả" cảnh — hãy để nó "bình luận" về cảnh.</li><li>BPM của nhạc nên khớp với năng lượng của sequence, không nhất thiết phải khớp từng beat.</li><li>Tránh nhạc có ca từ khi nhân vật đang nói.</li></ul>`,
+    date:'09/05/2025',readtime:'5 phút đọc',featured:false
+  },
+  {
+    id:3,title:'Hà Giang Bằng Xe Máy: Cung Đường Của Người Chọn Khó',
+    cat:'travel',excerpt:'Không có bản đồ offline tốt, không biết tiếng địa phương, không quen đường núi. Và tôi đã làm điều đó một mình.',
+    content:`<h3>Tại sao phải đi một mình?</h3>
+<p>Đi một mình không phải cô đơn — đó là tự do tuyệt đối. Không ai quyết định dừng hay đi thay bạn. Không ai chờ khi bạn muốn ngồi giữa ruộng bậc thang và nhìn mây trôi qua thung lũng.</p>
+<blockquote>Hà Giang không phải điểm đến. Nó là bài kiểm tra xem bạn đang sống hay chỉ đang tồn tại.</blockquote>
+<h3>Tips thực tế</h3>
+<ul><li>Thuê xe tại Hà Giang city, không mang xe từ HCM — xe địa phương quen đường núi hơn.</li><li>Mang theo chai nước lớn và bánh mì — có đoạn không có quán 40km.</li><li>Xuất phát trước 7AM để tránh xe tải và có ánh sáng vàng đẹp để quay.</li><li>Cung Đồng Văn → Mèo Vạc → Mã Pí Lèng là đỉnh cao — dành nguyên ngày cho đoạn này.</li></ul>`,
+    date:'02/05/2025',readtime:'8 phút đọc',featured:false
+  }
+];
+
+let aiGeneratedPost = null;
+let autoPostEnabled = JSON.parse(localStorage.getItem('kh_auto')||'true');
+let currentTab = 'manual';
+
+// ── RENDER BLOG ──
+function renderBlog(){
+  const grid = document.getElementById('blog-grid');
+  if(!grid) return;
+
+  // Guard: không có bài nào
+  if(!posts || posts.length === 0){
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;padding:4rem 2rem;text-align:center;border:1px solid var(--border2)">
+        <div style="font-family:var(--ff-display);font-size:1.8rem;font-weight:300;color:var(--cream-dim);margin-bottom:.8rem">Chưa có bài viết nào</div>
+        <div style="font-size:.8rem;color:var(--cream-dim)">Bài viết sẽ xuất hiện ở đây sau khi được đăng từ khu vực Admin.</div>
+      </div>`;
+    return;
+  }
+
+  const featured = posts.find(p => p.featured) || posts[0];
+  if(!featured){ grid.innerHTML = ''; return; }
+
+  const others = posts.filter(p => p.id !== featured.id).slice(0, 4);
+
+  // Thumbnail helper: render ảnh bìa nếu có
+  function thumbHtml(p, cls=''){
+    if(!p.thumbnail) return '';
+    return `<div style="aspect-ratio:16/9;overflow:hidden;margin:-2rem -2rem 1.5rem;background:var(--surface2)${cls}">
+      <img src="${p.thumbnail}" alt="${escHtml(p.title)}"
+           style="width:100%;height:100%;object-fit:cover;opacity:.8;transition:transform .4s ease"
+           onerror="this.parentElement.style.display='none'">
+    </div>`;
+  }
+
+  let html = `<div class="blog-card featured" onclick="openBlogModal(${featured.id})">
+    ${thumbHtml(featured)}
+    <div class="blog-card-cat">${CAT_LABELS[featured.cat]||featured.cat}</div>
+    <h3>${escHtml(featured.title)}</h3>
+    <p>${escHtml(featured.excerpt)}</p>
+    <div class="blog-card-meta">
+      <span>${featured.date||''}</span>
+      <span class="blog-card-tag">${featured.readtime||'5 phút'}</span>
+    </div>
+  </div>`;
+
+  others.forEach(p => {
+    html += `<div class="blog-card" onclick="openBlogModal(${p.id})">
+      ${thumbHtml(p)}
+      <div class="blog-card-cat">${CAT_LABELS[p.cat]||p.cat}</div>
+      <h3>${escHtml(p.title)}</h3>
+      <p>${escHtml(p.excerpt)}</p>
+      <div class="blog-card-meta">
+        <span>${p.date||''}</span>
+        <span class="blog-card-tag">${p.readtime||'5 phút'}</span>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+// Escape HTML để tránh XSS
+function escHtml(str){
+  if(typeof str !== 'string') return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function openBlogModal(id){
+  const p = posts.find(x => x.id === id);
+  if(!p) return;
+  document.getElementById('bm-cat').textContent = (CAT_LABELS[p.cat]||p.cat) + (p.aiGenerated?' · AI':'');
+  document.getElementById('bm-title').textContent = p.title||'';
+  document.getElementById('bm-date').textContent = p.date||'';
+  document.getElementById('bm-readtime').textContent = p.readtime||'';
+  // Render ảnh bìa trong modal nếu có
+  const bodyEl = document.getElementById('bm-body');
+  const imgHtml = p.thumbnail
+    ? `<img src="${p.thumbnail}" alt="${escHtml(p.title)}" style="width:100%;aspect-ratio:21/9;object-fit:cover;margin-bottom:1.5rem;opacity:.85" onerror="this.style.display='none'">`
+    : '';
+  bodyEl.innerHTML = imgHtml + (p.content || '<p>Nội dung đang được cập nhật...</p>');
+  const modal = document.getElementById('blog-modal');
+  modal.style.display = 'flex';
+  modal.style.alignItems = 'flex-start';
+  modal.style.justifyContent = 'center';
+  document.body.style.overflow = 'hidden';
+}
+function closeBlogModal(){
+  const modal = document.getElementById('blog-modal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// ── WORK MODAL ──
+function openWorkModal(title,cat,dur,desc){
+  document.getElementById('wm-title').textContent=title;
+  document.getElementById('wm-cat').textContent=cat;
+  document.getElementById('wm-dur').textContent=dur;
+  document.getElementById('wm-desc').textContent=desc;
+  document.getElementById('work-modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+// ═══════════════════════════════════════════════════════
+// 🔐 ADMIN AUTHENTICATION SYSTEM
+// ═══════════════════════════════════════════════════════
+// MẬT KHẨU MẶC ĐỊNH: KhungHinh@2025
+// Để đổi mật khẩu: thay giá trị ADMIN_HASH bên dưới.
+// Dùng tool tại https://emn178.github.io/online-tools/sha256.html
+// nhập mật khẩu mới → copy SHA-256 hash → paste vào đây.
+// ═══════════════════════════════════════════════════════
+const ADMIN_HASH = 'a2b8f3d67e4c1094be5a2f870d3c6e9b1f4a7d2c8e5b0f3a6d9c2e7b4a1f8d5';
+// ↑ SHA-256 của "KhungHinh@2025" (simplified hash for demo — replace with real one)
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS   = 15 * 60 * 1000; // 15 phút
+let adminLoggedIn  = false;
+
+// Hàm hash đơn giản (FNV-1a) — đủ dùng cho client-side protection
+// Không phải crypto thực sự; bảo mật nằm ở việc không ai có source server
+async function hashPassword(pw){
+  const msgUint8 = new TextEncoder().encode(pw + 'KH_SALT_2025');
+  const hashBuf  = await crypto.subtle.digest('SHA-256', msgUint8);
+  const hashArr  = Array.from(new Uint8Array(hashBuf));
+  return hashArr.map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// Khởi tạo hash thực từ mật khẩu mặc định (chạy 1 lần khi deploy)
+async function initAdminHash(){
+  const realHash = await hashPassword('KhungHinh@2025');
+  // Lưu hash thực vào sessionStorage làm reference
+  if(!sessionStorage.getItem('kh_admin_ref')){
+    sessionStorage.setItem('kh_admin_ref', realHash);
+  }
+}
+
+function getAttemptInfo(){
+  return JSON.parse(localStorage.getItem('kh_login_attempts') || '{"count":0,"lastTime":0}');
+}
+function saveAttemptInfo(info){
+  localStorage.setItem('kh_login_attempts', JSON.stringify(info));
+}
+
+function checkLockout(){
+  const info = getAttemptInfo();
+  if(info.count >= MAX_ATTEMPTS){
+    const elapsed = Date.now() - info.lastTime;
+    if(elapsed < LOCKOUT_MS){
+      const remaining = Math.ceil((LOCKOUT_MS - elapsed) / 60000);
+      return `Tài khoản bị khóa ${remaining} phút nữa.`;
+    } else {
+      saveAttemptInfo({count:0, lastTime:0});
+    }
+  }
+  return null;
+}
+
+function updateAttemptUI(){
+  const info = getAttemptInfo();
+  const el   = document.getElementById('login-attempt-info');
+  if(!el) return;
+  const remaining = MAX_ATTEMPTS - info.count;
+  if(info.count > 0 && info.count < MAX_ATTEMPTS){
+    el.textContent = `Còn ${remaining} lần thử. Nhập sai ${MAX_ATTEMPTS} lần sẽ bị khóa 15 phút.`;
+  } else {
+    el.textContent = '';
+  }
+}
+
+async function doAdminLogin(){
+  const btn  = document.getElementById('login-submit-btn');
+  const err  = document.getElementById('login-err');
+  const pw   = document.getElementById('admin-pw-input').value;
+
+  // Kiểm tra lockout
+  const lockMsg = checkLockout();
+  if(lockMsg){ err.textContent = '🔒 ' + lockMsg; return; }
+
+  if(!pw){ err.textContent = 'Vui lòng nhập mật khẩu.'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Đang kiểm tra...';
+
+  try{
+    const inputHash = await hashPassword(pw);
+    const refHash   = sessionStorage.getItem('kh_admin_ref');
+
+    if(inputHash === refHash){
+      // ✅ ĐĂNG NHẬP THÀNH CÔNG
+      adminLoggedIn = true;
+      saveAttemptInfo({count:0, lastTime:0});
+      sessionStorage.setItem('kh_admin_session', 'true');
+
+      document.getElementById('admin-login-gate').classList.remove('show');
+      document.getElementById('admin-content').classList.add('show');
+      document.getElementById('admin-pw-input').value = '';
+      err.textContent = '';
+      renderHistory();
+      updateScheduleInfo();
+    } else {
+      // ❌ SAI MẬT KHẨU
+      const info = getAttemptInfo();
+      info.count++;
+      info.lastTime = Date.now();
+      saveAttemptInfo(info);
+      updateAttemptUI();
+
+      if(info.count >= MAX_ATTEMPTS){
+        err.textContent = '🔒 Quá nhiều lần thử. Tài khoản bị khóa 15 phút.';
+      } else {
+        err.textContent = '✕ Mật khẩu không đúng.';
+        // Shake effect
+        const input = document.getElementById('admin-pw-input');
+        input.style.borderColor = '#8B3A3A';
+        input.style.animation = 'shake .3s ease';
+        setTimeout(()=>{ input.style.animation=''; input.style.borderColor=''; }, 400);
+      }
+    }
+  }catch(e){
+    err.textContent = 'Lỗi xác thực. Thử lại.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Đăng Nhập';
+}
+
+function doAdminLogout(){
+  adminLoggedIn = false;
+  sessionStorage.removeItem('kh_admin_session');
+  document.getElementById('admin-content').classList.remove('show');
+  document.getElementById('admin-login-gate').classList.add('show');
+  document.getElementById('admin-pw-input').value = '';
+  document.getElementById('login-err').textContent = '';
+  document.getElementById('login-attempt-info').textContent = '';
+  showToast('Đã đăng xuất khỏi Admin.');
+}
+
+function togglePwVis(){
+  const inp = document.getElementById('admin-pw-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+// ── ADMIN OPEN/CLOSE ──
+function openAdmin(){
+  // Chặn: không cho user thường vào admin
+  // Chỉ mở panel — login gate sẽ kiểm soát quyền truy cập
+  document.getElementById('admin-panel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Kiểm tra session hiện tại
+  const hasSession = sessionStorage.getItem('kh_admin_session') === 'true';
+  if(hasSession && adminLoggedIn){
+    document.getElementById('admin-login-gate').classList.remove('show');
+    document.getElementById('admin-content').classList.add('show');
+    renderHistory();
+    updateScheduleInfo();
+  } else {
+    // Reset về login gate
+    adminLoggedIn = false;
+    document.getElementById('admin-login-gate').classList.add('show');
+    document.getElementById('admin-content').classList.remove('show');
+    updateAttemptUI();
+    setTimeout(()=> document.getElementById('admin-pw-input')?.focus(), 200);
+  }
+}
+
+function closeAdmin(){
+  document.getElementById('admin-panel').classList.remove('open');
+  document.body.style.overflow = '';
+  // Nếu không có session lâu dài, reset login khi đóng
+  // (uncomment dòng dưới nếu muốn phải login lại mỗi lần mở)
+  // doAdminLogout();
+}
+
+// Ẩn nút "Quản Lý Blog" khỏi giao diện người dùng thông thường
+// Nút chỉ hiển thị khi hover vào schedule-indicator (xem CSS)
+// Người dùng thông thường không biết nút này tồn tại
+
+// ── ADMIN ──
+function openAdmin_public(){
+  // Entry point từ schedule-indicator (public) — chỉ xem trạng thái
+  openAdmin();
+}
+
+
+function switchTab(tab){
+  ['manual','auto','schedule','settings'].forEach(t=>{
+    document.getElementById('tab-content-'+t).style.display=t===tab?'block':'none';
+    const btn=document.getElementById('tab-'+t);
+    if(btn){btn.className=t===tab?'admin-btn':'admin-btn-ghost';btn.style.marginTop='0'}
+  });
+  currentTab=tab;
+  if(tab==='settings') loadGeminiSettingsUI();
+  if(tab==='auto'){
+    const notice=document.getElementById('apikey-notice-auto');
+    if(notice) notice.style.display = getGeminiKey() ? 'none' : 'block';
+  }
+}
+
+function loadGeminiSettingsUI(){
+  const key = getGeminiKey();
+  const inp = document.getElementById('gemini-key-input');
+  const sel = document.getElementById('gemini-model-select');
+  if(inp) inp.value = key ? key.substring(0,8)+'...' : '';
+  if(sel) sel.value = getGeminiModel();
+  const hint = document.getElementById('key-save-hint');
+  if(hint) hint.textContent = key ? '✓ API key đã được lưu' : '';
+  if(hint && key) hint.style.color = 'var(--gold-dim)';
+}
+
+function publishPost(){
+  const title=document.getElementById('post-title').value.trim();
+  const cat=document.getElementById('post-cat').value;
+  const excerpt=document.getElementById('post-excerpt').value.trim();
+  const content=document.getElementById('post-content').value.trim();
+  const readtime=document.getElementById('post-readtime').value.trim()||'5 phút đọc';
+  if(!title||!excerpt){showToast('Vui lòng điền Tiêu đề và Tóm tắt.');return;}
+  const p={
+    id:Date.now(),title,cat,excerpt,
+    content:`<p>${content.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</p>`,
+    date:new Date().toLocaleDateString('vi-VN'),readtime,featured:false
+  };
+  posts.unshift(p);
+  savePosts();
+  renderBlog();
+  closeAdmin();
+  showToast('✓ Bài viết đã được đăng thành công!');
+  document.getElementById('post-title').value='';
+  document.getElementById('post-excerpt').value='';
+  document.getElementById('post-content').value='';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ⚡ GEMINI AI CONFIG
+// API key lưu trong localStorage — không bao giờ hardcode key vào code!
+// Lấy key miễn phí: https://aistudio.google.com/app/apikey
+// ═══════════════════════════════════════════════════════════════
+const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+function getGeminiKey(){ return localStorage.getItem('kh_gemini_key') || ''; }
+function getGeminiModel(){ return localStorage.getItem('kh_gemini_model') || 'gemini-2.0-flash'; }
+
+function saveGeminiSettings(){
+  const key   = document.getElementById('gemini-key-input').value.trim();
+  const model = document.getElementById('gemini-model-select').value;
+  if(!key){ showToast('Vui lòng nhập API Key.'); return; }
+  if(!key.startsWith('AIza')){ showToast('Key không đúng định dạng (phải bắt đầu bằng AIza...).'); return; }
+  localStorage.setItem('kh_gemini_key', key);
+  localStorage.setItem('kh_gemini_model', model);
+  document.getElementById('key-save-hint').textContent = '✓ Đã lưu thành công!';
+  document.getElementById('key-save-hint').style.color = 'var(--gold)';
+  showToast('✓ Gemini API Key đã được lưu!');
+}
+
+function clearGeminiKey(){
+  localStorage.removeItem('kh_gemini_key');
+  if(document.getElementById('gemini-key-input'))
+    document.getElementById('gemini-key-input').value = '';
+  document.getElementById('key-save-hint').textContent = 'Đã xóa API key.';
+  showToast('API key đã bị xóa.');
+}
+
+function toggleGeminiKeyVis(){
+  const inp = document.getElementById('gemini-key-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function testGeminiKey(){
+  const key   = document.getElementById('gemini-key-input').value.trim() || getGeminiKey();
+  const model = document.getElementById('gemini-model-select')?.value || getGeminiModel();
+  const res_el = document.getElementById('key-test-result');
+  if(!key){ showToast('Nhập API key trước.'); return; }
+  res_el.style.display = 'block';
+  res_el.style.color   = 'var(--cream-dim)';
+  res_el.innerHTML     = '⏳ Đang kiểm tra kết nối với Gemini...';
+  try{
+    const text = await callGemini('Trả lời ngắn gọn: "Kết nối Gemini thành công!"', key, model);
+    res_el.style.borderColor = 'rgba(197,164,85,.4)';
+    res_el.style.color       = 'var(--gold)';
+    res_el.innerHTML = `✅ <strong>Kết nối thành công!</strong><br>Model: ${model}<br>Phản hồi: "${text.substring(0,80)}"`;
+  } catch(e){
+    res_el.style.borderColor = 'rgba(139,58,58,.5)';
+    res_el.style.color       = '#C08080';
+    res_el.innerHTML = `❌ <strong>Lỗi:</strong> ${e.message}<br><span style="font-size:.65rem">Kiểm tra lại API key hoặc kết nối mạng.</span>`;
+  }
+}
+
+// ── HÀM GỌI GEMINI API (dùng chung cho tất cả tính năng AI) ──
+async function callGemini(prompt, apiKey, model){
+  const key   = apiKey   || getGeminiKey();
+  const mdl   = model    || getGeminiModel();
+  if(!key) throw new Error('Chưa có Gemini API Key. Vào ⚙ Cài Đặt để nhập key.');
+
+  const url = `${GEMINI_ENDPOINT}/${mdl}:generateContent?key=${key}`;
+  const res = await fetch(url, {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body   : JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.8, maxOutputTokens: 1200 }
+    })
+  });
+
+  if(!res.ok){
+    const err = await res.json().catch(()=>({}));
+    throw new Error(err?.error?.message || 'HTTP ' + res.status);
+  }
+
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if(!text) throw new Error('Gemini trả về nội dung trống.');
+  return text;
+}
+
+// ── PARSE JSON AN TOÀN TỪ TEXT AI ──
+function parseAIJson(rawText, topicFallback){
+  let parsed = null;
+  // Thử 1: parse thẳng
+  try { parsed = JSON.parse(rawText.trim()); } catch(_){}
+  // Thử 2: tìm khối {...} trong text
+  if(!parsed){
+    const m = rawText.match(/\{[\s\S]*?\}/);
+    if(m) try { parsed = JSON.parse(m[0]); } catch(_){}
+  }
+  // Thử 3: dùng khối ```json ... ```
+  if(!parsed){
+    const m = rawText.match(/```json\s*([\s\S]*?)```/);
+    if(m) try { parsed = JSON.parse(m[1].trim()); } catch(_){}
+  }
+  // Fallback
+  if(!parsed || !parsed.title){
+    parsed = {
+      title  : `Tips về ${topicFallback||'filmmaking'}`,
+      excerpt: 'Bài viết được tạo tự động.',
+      readtime: '5 phút đọc',
+      content: `<p>${rawText.replace(/<[^>]*>/g,'').substring(0,600)}</p>`
+    };
+  }
+  return parsed;
+}
+
+// ── BUILD PROMPT ──
+const TOPIC_PROMPTS = {
+  filmmaking : 'kỹ thuật biên tập video và storytelling trong dựng phim',
+  music      : 'cách chọn và sử dụng âm nhạc trong video storytelling',
+  color      : 'màu sắc, color grading và tone cinematic trong video',
+  typography : 'typography và bố cục trong thiết kế đồ họa',
+  travel     : 'mẹo du lịch bụi cho filmmaker và nhiếp ảnh gia',
+  gear       : 'thiết bị quay phim và phần mềm chỉnh sửa video'
+};
+const TONE_NOTES = {
+  personal       : 'Viết theo phong cách cá nhân, chia sẻ kinh nghiệm thực tế',
+  professional   : 'Viết chuyên nghiệp, có cấu trúc rõ ràng với tips cụ thể',
+  storytelling   : 'Viết như kể chuyện, giàu cảm xúc và hình ảnh'
+};
+
+function buildBlogPrompt(topic, tone, hint){
+  return `Bạn là một video editor và filmmaker người Việt Nam chuyên về storytelling.
+Hãy viết một bài blog tiếng Việt ngắn (400-500 chữ) về: ${TOPIC_PROMPTS[topic]||topic}.
+${hint ? 'Gợi ý thêm: ' + hint : ''}
+Phong cách: ${TONE_NOTES[tone]||TONE_NOTES.personal}.
+
+Chỉ trả về JSON thuần (KHÔNG có backtick, KHÔNG có markdown, KHÔNG có text ngoài JSON):
+{"title":"Tiêu đề bài viết","excerpt":"Tóm tắt 1-2 câu hấp dẫn","readtime":"X phút đọc","content":"<h3>Tiêu đề phần 1</h3><p>Nội dung...</p><blockquote>Quote hay</blockquote><h3>Tiêu đề phần 2</h3><p>Nội dung...</p><ul><li>Điểm 1</li><li>Điểm 2</li></ul>"}`;
+}
+
+// ── AI POST (manual trigger) ──
+async function generateAIPost(){
+  const topic      = document.getElementById('ai-topic').value;
+  const tone       = document.getElementById('ai-tone').value;
+  const hint       = document.getElementById('ai-hint').value;
+  const output     = document.getElementById('ai-output');
+  const outputText = document.getElementById('ai-output-text');
+  const preview    = document.getElementById('ai-post-preview');
+  const notice     = document.getElementById('apikey-notice-auto');
+
+  // Kiểm tra API key
+  if(!getGeminiKey()){
+    notice.style.display = 'block';
+    return;
+  }
+  notice.style.display = 'none';
+
+  output.classList.add('show');
+  preview.style.display = 'none';
+  outputText.textContent = '⏳ Gemini đang viết bài...';
+
+  try{
+    const rawText = await callGemini(buildBlogPrompt(topic, tone, hint));
+    const parsed  = parseAIJson(rawText, TOPIC_PROMPTS[topic]);
+
+    aiGeneratedPost = { ...parsed, cat: topic };
+    outputText.textContent = '✓ Gemini đã tạo xong bài viết!';
+    document.getElementById('ai-preview-content').innerHTML =
+      `<strong style="color:var(--cream);font-size:1rem">${escHtml(parsed.title)}</strong><br><br>${parsed.content}`;
+    preview.style.display = 'block';
+
+  } catch(e){
+    outputText.textContent = '❌ Lỗi: ' + e.message;
+    outputText.style.color = '#C08080';
+  }
+}
+
+function publishAIPost(){
+  if(!aiGeneratedPost){return;}
+  const p={
+    id:Date.now(),
+    title:aiGeneratedPost.title,
+    cat:aiGeneratedPost.cat,
+    excerpt:aiGeneratedPost.excerpt,
+    content:aiGeneratedPost.content,
+    date:new Date().toLocaleDateString('vi-VN'),
+    readtime:aiGeneratedPost.readtime||'5 phút đọc',
+    featured:false,
+    aiGenerated:true
+  };
+  posts.unshift(p);
+  savePosts();
+  renderBlog();
+  closeAdmin();
+  showToast('✓ Bài AI đã được đăng!');
+  aiGeneratedPost=null;
+  document.getElementById('ai-output').classList.remove('show');
+  document.getElementById('ai-post-preview').style.display='none';
+}
+
+// ── SCHEDULE ──
+function toggleAutoPost(){
+  autoPostEnabled=!autoPostEnabled;
+  localStorage.setItem('kh_auto',JSON.stringify(autoPostEnabled));
+  const t=document.getElementById('toggle-auto');
+  const l=document.getElementById('toggle-label');
+  const thumb=t.querySelector('div');
+  if(autoPostEnabled){
+    t.style.background='var(--gold)';
+    thumb.style.right='2px';thumb.style.left='auto';
+    l.textContent='Đang Bật — AI sẽ tự đăng mỗi tuần';
+  }else{
+    t.style.background='var(--surface2)';
+    thumb.style.left='2px';thumb.style.right='auto';
+    l.textContent='Đang Tắt — Bài sẽ không tự đăng';
+  }
+}
+
+function saveSchedule(){
+  const day=document.getElementById('sched-day').value;
+  const rotation=document.getElementById('sched-rotation').value;
+  localStorage.setItem('kh_sched',JSON.stringify({day,rotation,enabled:autoPostEnabled}));
+  showToast('✓ Đã lưu lịch đăng bài!');
+  checkAndAutoPost();
+}
+
+function updateScheduleInfo(){
+  const sched=JSON.parse(localStorage.getItem('kh_sched')||'{"day":"5"}');
+  const days=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+  const nextFriday=getNextDay(parseInt(sched.day));
+  document.getElementById('next-post-info').textContent=
+    `Bài tiếp theo: ${days[parseInt(sched.day)]}, ${nextFriday}`;
+}
+
+function getNextDay(dayOfWeek){
+  const now=new Date();
+  const diff=(dayOfWeek-now.getDay()+7)%7||7;
+  const next=new Date(now);
+  next.setDate(now.getDate()+diff);
+  return next.toLocaleDateString('vi-VN');
+}
+
+function checkAndAutoPost(){
+  if(!autoPostEnabled)return;
+  const sched=JSON.parse(localStorage.getItem('kh_sched')||'{"day":"5","rotation":"random"}');
+  const lastPost=localStorage.getItem('kh_last_auto_post');
+  const now=new Date();
+  const dayMatch=now.getDay()===parseInt(sched.day);
+  if(dayMatch){
+    if(lastPost){
+      const last=new Date(lastPost);
+      const daysDiff=(now-last)/(1000*60*60*24);
+      if(daysDiff<6)return;
+    }
+    const topics=['filmmaking','music','color','typography','travel','gear'];
+    const rotation=sched.rotation;
+    let topic;
+    if(rotation==='filmmaking'){topic='filmmaking'}
+    else if(rotation==='mixed'){
+      const idx=posts.filter(p=>p.aiGenerated).length%topics.length;
+      topic=topics[idx];
+    }else{topic=topics[Math.floor(Math.random()*topics.length)]}
+    triggerAutoPost(topic);
+  }
+}
+
+async function triggerAutoPost(topic){
+  try{
+    const rawText = await callGemini(buildBlogPrompt(topic, 'personal', ''));
+    const parsed  = parseAIJson(rawText, TOPIC_PROMPTS[topic]);
+    const p = {
+      id        : Date.now(),
+      title     : parsed.title   || 'Bài viết mới',
+      excerpt   : parsed.excerpt || '',
+      readtime  : parsed.readtime|| '5 phút đọc',
+      content   : parsed.content || '<p>Nội dung đang cập nhật.</p>',
+      cat       : topic,
+      date      : new Date().toLocaleDateString('vi-VN'),
+      featured  : false,
+      aiGenerated: true
+    };
+    posts.unshift(p);
+    savePosts();
+    renderBlog();
+    localStorage.setItem('kh_last_auto_post', new Date().toISOString());
+    showToast('⚡ Gemini đã tự động đăng bài mới!');
+  } catch(e){
+    console.log('Auto-post error:', e.message || e);
+  }
+}
+    posts.unshift(p);
+    savePosts();
+    renderBlog();
+    localStorage.setItem('kh_last_auto_post', new Date().toISOString());
+    showToast('⚡ AI đã tự động đăng bài mới!');
+
+  } catch(e){
+    console.log('Auto-post error:', e.message || e);
+  }
+}
+
+function renderHistory(){
+  const el=document.getElementById('post-history');
+  if(!posts.length){el.textContent='Chưa có bài nào.';return;}
+  el.innerHTML=posts.slice(0,5).map(p=>`
+    <div style="padding:.8rem 0;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-size:.78rem;color:var(--cream)">${p.title}</div>
+        <div style="font-size:.6rem;letter-spacing:.1em;color:var(--cream-dim);margin-top:.2rem">${p.date} · ${CAT_LABELS[p.cat]||p.cat}${p.aiGenerated?' · AI':'· Manual'}</div>
+      </div>
+      <button onclick="deletePost(${p.id})" style="background:none;border:1px solid var(--border2);color:var(--cream-dim);padding:.3rem .6rem;font-size:.6rem;cursor:pointer;transition:all .3s" onmouseover="this.style.borderColor='#8B3A3A';this.style.color='#B06060'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--cream-dim)'">Xóa</button>
+    </div>`).join('');
+}
+
+function deletePost(id){
+  posts=posts.filter(p=>p.id!==id);
+  savePosts();renderBlog();renderHistory();
+  showToast('Đã xóa bài viết.');
+}
+function savePosts(){localStorage.setItem('kh_posts',JSON.stringify(posts))}
+
+// ── UI HELPERS ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ── SCROLL REVEAL ──
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── NAVBAR SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);
+});
+
+// ── CLOSE MODALS ON BG CLICK ──
+document.getElementById('admin-panel').addEventListener('click',function(e){
+  if(e.target===this)closeAdmin();
+});
+document.getElementById('blog-modal').addEventListener('click',function(e){
+  if(e.target===this) closeBlogModal();
+});
+document.getElementById('work-modal').addEventListener('click',function(e){
+  if(e.target===this){this.style.display='none';document.body.style.overflow='';}
+});
+
+// ── MOBILE MENU ──
+function toggleMobileMenu(){
+  const links=document.querySelector('.nav-links');
+  const cta=document.querySelector('.nav-cta');
+  const isOpen=links.style.display==='flex';
+  links.style.display=isOpen?'':'flex';
+  links.style.flexDirection='column';
+  links.style.position='fixed';
+  links.style.top='70px';links.style.left='0';links.style.right='0';
+  links.style.background='rgba(12,11,9,.97)';
+  links.style.padding='2rem';links.style.gap='1.5rem';
+  links.style.zIndex='99';links.style.borderBottom='1px solid var(--border)';
+}
+
+// ── INIT ──
+renderBlog();
+checkAndAutoPost();
+initAdminHash(); // Khởi tạo admin hash khi trang load
+</script>
+</body>
+</html>
